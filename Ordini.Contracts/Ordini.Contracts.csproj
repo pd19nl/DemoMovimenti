@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <Folder Include="Events\Inventario\" />
+    <Folder Include="Events\Notifica\" />
+    <Folder Include="Events\Pagamento\" />
   </ItemGroup>
 
 </Project>
