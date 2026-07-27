@@ -14,5 +14,5 @@
         public List<DettaglioProdotto> DettaglioProdotti { get; set; } = new List<DettaglioProdotto>();
     }
 
-    public record DettaglioProdotto(string codArt, int qta, decimal prezzo);
+
 }
