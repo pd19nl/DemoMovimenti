@@ -1,4 +1,5 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Configurations.SerilogConfig;
 using Ordini.Api.Domains.Repositories.Dapper;
@@ -185,7 +186,8 @@ void MapEndpoints(IEndpointRouteBuilder app)
         OrdineDTO ritorno = OrdineModelToDTO.MapOrdineToDTO(ordineMD);
         return Results.Ok(ritorno);
 
-    }).WithName("GetOrdineByID");
+    }).WithName("GetOrdineByID")
+    .RequireAuthorization(new AuthorizeAttribute { Roles = "User,Admin" });
 
 
 }
