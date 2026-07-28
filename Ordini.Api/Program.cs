@@ -1,5 +1,7 @@
+using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Repositories.Dapper;
+using Ordini.Api.Validators.Ordine;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,17 @@ builder.Services.AddJwtAuthentication(configuration);
 builder.Services.AddAuthorization();
 
 //servizi Scoped: per tutta la durata della richiesta HTTP
+//lettura dati tramite datter -- CQRS
 builder.Services.AddScoped<OrdineRepositoryReader>();
+
+
+
+//registrazione Validatori
+builder.Services.AddValidatorsFromAssemblyContaining<OrdineValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DettaglioOrdineValidator>();
+
+
+
 
 
 
