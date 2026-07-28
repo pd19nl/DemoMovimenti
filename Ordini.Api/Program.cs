@@ -94,6 +94,11 @@ builder.Services.AddCors(opt =>
 
 
 
+// =======================================================================================
+// configurazione SignalR
+builder.Services.AddSignalR();
+
+
 
 
 
