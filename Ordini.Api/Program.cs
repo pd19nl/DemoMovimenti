@@ -2,6 +2,7 @@ using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Repositories.Dapper;
 using Ordini.Api.Validators.Ordine;
+using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(configuration);
 builder.Services.AddAuthorization();
 
-//servizi Scoped: per tutta la durata della richiesta HTTP
+//servizi Scoped: per tutta la durata della richiesta HTTP, una istanza per richiesta HTTP
 //lettura dati tramite datter -- CQRS
 builder.Services.AddScoped<OrdineRepositoryReader>();
 
@@ -29,6 +30,25 @@ builder.Services.AddValidatorsFromAssemblyContaining<AddOrdineValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddDettaglioOrdineValidator>();
 
 
+//configurazione RabbitMQ
+// come servizio singleton
+builder.Services.AddSingleton(r =>
+{
+    var factory = new ConnectionFactory()
+    {
+        HostName = configuration["RabbitMQ:HostName"],
+        UserName = configuration["RabbitMQ:UserName"],
+        Password = configuration["RabbitMQ:Password"],
+    };
+
+    return factory.CreateConnection();
+});
+//registrazione canale RabbitMQ come servizio Scoped
+builder.Services.AddScoped(r =>
+{
+    var connection = r.GetRequiredService<IConnection>();
+    return connection.CreateModel();
+});
 
 
 
