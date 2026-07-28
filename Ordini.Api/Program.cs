@@ -1,8 +1,10 @@
 using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
+using Ordini.Api.Configurations.SerilogConfig;
 using Ordini.Api.Repositories.Dapper;
 using Ordini.Api.Validators.Ordine;
 using RabbitMQ.Client;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -59,7 +61,11 @@ builder.Services.AddScoped(r =>
 
 // =======================================================================================
 // configurazione Serilog
-
+builder.Services.AddHttpContextAccessor();
+builder.Host.UseSerilog((context, service, logConfig) =>
+{
+    SerilogConfiguration.ConfigureSerilog(context, service, logConfig);
+});
 
 
 
