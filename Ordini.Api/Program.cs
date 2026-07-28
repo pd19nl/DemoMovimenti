@@ -77,10 +77,29 @@ builder.Services.AddExceptionHandler<GloblalExceptionHandler>();
 
 
 
+// =======================================================================================
+//aggiunta supporto CORS per far connettere i client
+//definizione di una polocy specifica
+var WebAssClientPolicy = "WebAssClientPolicy";
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy(WebAssClientPolicy, policy =>
+    {
+        policy.WithOrigins("http://localhost:4200") //url del client
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials(); // ad uso del SignalR
+    });
+});
 
 
 
 
+
+
+
+// =======================================================================================
+// parte nativa del progetto
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
