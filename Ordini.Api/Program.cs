@@ -1,10 +1,13 @@
 using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Configurations.SerilogConfig;
+using Ordini.Api.Domains.Repositories.Dapper;
 using Ordini.Api.Exceptions;
+using Ordini.Api.Helpers.Mapper;
 using Ordini.Api.Hubs;
-using Ordini.Api.Repositories.Dapper;
 using Ordini.Api.Validators.Ordine;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno;
+using Ordini.Contracts.Models;
 using RabbitMQ.Client;
 using Serilog;
 
@@ -158,6 +161,31 @@ app.UseAuthorization(); //middlware di autorizzazione
 app.MapHub<OrderStatusHub>("/orderStatusHub");
 
 
+//caricamento endpoint
+MapEndpoints(app);
 
 
 app.Run();
+
+
+//caricamento endpoints
+void MapEndpoints(IEndpointRouteBuilder app)
+{
+    //endpoint root
+    app.MapGet("/", () => "Ordini Web API avviata!");
+
+    var ordiniGroup = app.MapGroup("/api/ordini").RequireAuthorization();
+    ordiniGroup.MapGet("/{id}", async (string id, OrdineRepositoryReader ordineRepositoryReader) =>
+    {
+        Ordine ordineMD = await ordineRepositoryReader.GetOrdineByIdAsync(id);
+
+        if (ordineMD == null)
+            return Results.NotFound();
+
+        OrdineDTO ritorno = OrdineModelToDTO.MapOrdineToDTO(ordineMD);
+        return Results.Ok(ritorno);
+
+    }).WithName("GetOrdineByID");
+
+
+}

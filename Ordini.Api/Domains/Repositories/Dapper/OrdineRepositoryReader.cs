@@ -3,7 +3,7 @@ using Microsoft.Data.SqlClient;
 using Ordini.Api.Configurations;
 using Ordini.Contracts.Models;
 
-namespace Ordini.Api.Repositories.Dapper
+namespace Ordini.Api.Domains.Repositories.Dapper
 {
     public class OrdineRepositoryReader
     {
