@@ -1,14 +1,11 @@
 using FluentValidation;
-using Microsoft.AspNetCore.Authorization;
+using Ordini.Api.Configurations.Endpoints;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Configurations.SerilogConfig;
 using Ordini.Api.Domains.Repositories.Dapper;
 using Ordini.Api.Exceptions;
-using Ordini.Api.Helpers.Mapper;
 using Ordini.Api.Hubs;
 using Ordini.Api.Validators.Ordine;
-using Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno;
-using Ordini.Contracts.Models;
 using RabbitMQ.Client;
 using Serilog;
 
@@ -163,31 +160,31 @@ app.MapHub<OrderStatusHub>("/orderStatusHub");
 
 
 //caricamento endpoint
-MapEndpoints(app);
+EndpointsLoad.MapEndpoints(app);
 
 
 app.Run();
 
 
-//caricamento endpoints
-void MapEndpoints(IEndpointRouteBuilder app)
-{
-    //endpoint root
-    app.MapGet("/", () => "Ordini Web API avviata!");
+////caricamento endpoints
+//void MapEndpoints(IEndpointRouteBuilder app)
+//{
+//    //endpoint root
+//    app.MapGet("/", () => "Ordini Web API avviata!");
 
-    var ordiniGroup = app.MapGroup("/api/ordini").RequireAuthorization();
-    ordiniGroup.MapGet("/{id}", async (string id, OrdineRepositoryReader ordineRepositoryReader) =>
-    {
-        Ordine ordineMD = await ordineRepositoryReader.GetOrdineByIdAsync(id);
+//    var ordiniGroup = app.MapGroup("/api/ordini").RequireAuthorization();
+//    ordiniGroup.MapGet("/{id}", async (string id, OrdineRepositoryReader ordineRepositoryReader) =>
+//    {
+//        Ordine ordineMD = await ordineRepositoryReader.GetOrdineByIdAsync(id);
 
-        if (ordineMD == null)
-            return Results.NotFound();
+//        if (ordineMD == null)
+//            return Results.NotFound();
 
-        OrdineDTO ritorno = OrdineModelToDTO.MapOrdineToDTO(ordineMD);
-        return Results.Ok(ritorno);
+//        OrdineDTO ritorno = OrdineModelToDTO.MapOrdineToDTO(ordineMD);
+//        return Results.Ok(ritorno);
 
-    }).WithName("GetOrdineByID")
-    .RequireAuthorization(new AuthorizeAttribute { Roles = "User,Admin" });
+//    }).WithName("GetOrdineByID")
+//    .RequireAuthorization(new AuthorizeAttribute { Roles = "User,Admin" });
 
 
-}
+//}
