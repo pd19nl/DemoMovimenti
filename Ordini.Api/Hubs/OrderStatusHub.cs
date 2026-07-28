@@ -35,10 +35,11 @@ namespace Ordini.Api.Hubs
         /// pubblicazione dei messaggi
         /// </summary>
         /// <returns></returns>
-        public async Task SendNotiticationToGroup(string idOrder, string status, string motivo)
+        public async Task SendNotiticationToGroup(string idOrder, eOrdineStatus status, string motivo)
         {
 
             _logger.LogInformation("Notifica al gruppo {IdOrder}: {status} - {motivo}", idOrder, status, motivo);
+
             await Clients.Group(idOrder)
                 .SendAsync("OrderStatusUpdate", new SignalRMessageDTO() { Status = status, Motivo = motivo });
         }
