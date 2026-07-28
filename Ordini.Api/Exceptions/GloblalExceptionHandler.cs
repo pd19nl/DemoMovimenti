@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Ordini.ApplicationAPI.Models.DTOs;
 
 namespace Ordini.Api.Exceptions
 {
@@ -23,7 +24,7 @@ namespace Ordini.Api.Exceptions
         /// <exception cref="NotImplementedException"></exception>
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
         {
-            var traceId = ActivityTrackingOptions.TraceId.ToString() ?? httpContext.TraceIdentifier;
+            string traceId = ActivityTrackingOptions.TraceId.ToString() ?? httpContext.TraceIdentifier;
 
             //gestione delle risposte da fornire
             //si considerano 4 parametri: statusCode, title, details, errors
@@ -47,13 +48,13 @@ namespace Ordini.Api.Exceptions
             };
 
             //corpo risposta personalizzata
-            var problema = new
+            MessaggioExceptionDTO problema = new MessaggioExceptionDTO()
             {
-                status = statusCode,
-                title = title,
-                detail = details,
-                traceId,
-                errors
+                Status = statusCode,
+                Title = title,
+                Detail = details,
+                TraceId = traceId,
+                Errors = errors
             };
 
             //log delle informazioni
