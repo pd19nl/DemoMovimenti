@@ -25,8 +25,8 @@ builder.Services.AddScoped<OrdineRepositoryReader>();
 
 
 //registrazione Validatori
-builder.Services.AddValidatorsFromAssemblyContaining<OrdineValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<DettaglioOrdineValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddOrdineValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddDettaglioOrdineValidator>();
 
 
 

@@ -10,7 +10,7 @@
 
         public string IdOrdine { get; set; } = string.Empty;
 
-        public Ordine DatoModificato { get; set; }
+        public Ordini.Contracts.Models.Ordine DatoModificato { get; set; }
     }
 
 }

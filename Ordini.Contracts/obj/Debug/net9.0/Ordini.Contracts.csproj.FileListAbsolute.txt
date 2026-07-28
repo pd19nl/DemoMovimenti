@@ -1,0 +1,12 @@
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.AssemblyInfoInputs.cache
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.AssemblyInfo.cs
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.csproj.CoreCompileInputs.cache
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.sourcelink.json
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.deps.json
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.dll
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.pdb
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.dll
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\refint\Ordini.Contracts.dll
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\Ordini.Contracts.pdb
+C:\Dossi\Studio\VS\kafka_DDD_Saga\DemoMovimenti\Ordini.Contracts\obj\Debug\net9.0\ref\Ordini.Contracts.dll
