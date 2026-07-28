@@ -1395,6 +1395,16 @@
         "runtime": {
           "lib/netcoreapp2.1/_._": {}
         }
+      },
+      "Ordini.ApplicationAPI.Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Ordini.ApplicationAPI.Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Ordini.ApplicationAPI.Models.dll": {}
+        }
       }
     }
   },
@@ -3753,6 +3763,11 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Ordini.ApplicationAPI.Models/1.0.0": {
+      "type": "project",
+      "path": "../Ordini.ApplicationAPI.Models/Ordini.ApplicationAPI.Models.csproj",
+      "msbuildProject": "../Ordini.ApplicationAPI.Models/Ordini.ApplicationAPI.Models.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -3762,6 +3777,7 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 9.0.8",
       "Microsoft.AspNetCore.OpenApi >= 9.0.18",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.9",
+      "Ordini.ApplicationAPI.Models >= 1.0.0",
       "RabbitMQ.Client >= 6.8.1",
       "Serilog >= 4.3.0",
       "Serilog.AspNetCore >= 9.0.0",
@@ -3807,7 +3823,11 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.ApplicationAPI.Models\\Ordini.ApplicationAPI.Models.csproj": {
+              "projectPath": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.ApplicationAPI.Models\\Ordini.ApplicationAPI.Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

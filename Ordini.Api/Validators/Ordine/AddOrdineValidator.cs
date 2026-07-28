@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Ordini.ApplicationAPI.Models.DTOs.Creazione;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Creazione;
 
 namespace Ordini.Api.Validators.Ordine
 {

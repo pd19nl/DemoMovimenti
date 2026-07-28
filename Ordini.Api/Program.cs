@@ -2,6 +2,7 @@ using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Configurations.SerilogConfig;
 using Ordini.Api.Exceptions;
+using Ordini.Api.Hubs;
 using Ordini.Api.Repositories.Dapper;
 using Ordini.Api.Validators.Ordine;
 using RabbitMQ.Client;
@@ -101,22 +102,34 @@ builder.Services.AddSignalR();
 
 
 
-
-
 // =======================================================================================
 // parte nativa del progetto
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// disabilitato builder.Services.AddOpenApi();
+
+
+// =======================================================================================
+// configurazione pipeline
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    // disabilitato app.MapOpenApi();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+
+// =======================================================================================
+//applicazione policy CORS
+app.UseCors(WebAssClientPolicy);
+
+
 
 app.UseHttpsRedirection();
 
@@ -133,5 +146,18 @@ app.UseHttpsRedirection();
 //    return forecast;
 //})
 //.WithName("GetWeatherForecast");
+
+
+// =======================================================================================
+//sicurezza
+app.UseAuthentication(); //middlware di autenticazione
+app.UseAuthorization(); //middlware di autorizzazione
+
+// =======================================================================================
+//configurazione SignalIR e mappatura Hub
+app.MapHub<OrderStatusHub>("/orderStatusHub");
+
+
+
 
 app.Run();

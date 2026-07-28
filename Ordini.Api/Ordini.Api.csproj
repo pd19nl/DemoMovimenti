@@ -38,9 +38,11 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Folder Include="Helpers\" />
-	  <Folder Include="Hubs\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Filters\" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Ordini.ApplicationAPI.Models\Ordini.ApplicationAPI.Models.csproj" />
 	</ItemGroup>
 	
 </Project>
