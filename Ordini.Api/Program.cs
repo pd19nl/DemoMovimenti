@@ -1,4 +1,5 @@
 using Ordini.Api.Configurations.JwtConfig;
+using Ordini.Api.Repositories.Dapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +16,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddJwtAuthentication(configuration);
 builder.Services.AddAuthorization();
 
-
-
+//servizi Scoped: per tutta la durata della richiesta HTTP
+builder.Services.AddScoped<OrdineRepositoryReader>();
 
 
 
