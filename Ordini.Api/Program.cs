@@ -6,6 +6,7 @@ using RabbitMQ.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// =======================================================================================
 //configurazione progetto
 var configuration = builder.Configuration;
 
@@ -15,21 +16,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
+// =======================================================================================
 //abilitazione JWT ed autenticazione
 builder.Services.AddJwtAuthentication(configuration);
 builder.Services.AddAuthorization();
 
+
+// =======================================================================================
 //servizi Scoped: per tutta la durata della richiesta HTTP, una istanza per richiesta HTTP
 //lettura dati tramite datter -- CQRS
 builder.Services.AddScoped<OrdineRepositoryReader>();
 
 
 
+// =======================================================================================
 //registrazione Validatori
 builder.Services.AddValidatorsFromAssemblyContaining<AddOrdineValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<AddDettaglioOrdineValidator>();
+//builder.Services.AddValidatorsFromAssemblyContaining<AddDettaglioOrdineValidator>();
 
 
+// =======================================================================================
 //configurazione RabbitMQ
 // come servizio singleton
 builder.Services.AddSingleton(r =>
@@ -49,6 +55,12 @@ builder.Services.AddScoped(r =>
     var connection = r.GetRequiredService<IConnection>();
     return connection.CreateModel();
 });
+
+
+// =======================================================================================
+// configurazione Serilog
+
+
 
 
 
