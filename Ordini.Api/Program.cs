@@ -1,6 +1,7 @@
 using FluentValidation;
 using Ordini.Api.Configurations.JwtConfig;
 using Ordini.Api.Configurations.SerilogConfig;
+using Ordini.Api.Exceptions;
 using Ordini.Api.Repositories.Dapper;
 using Ordini.Api.Validators.Ordine;
 using RabbitMQ.Client;
@@ -69,6 +70,10 @@ builder.Host.UseSerilog((context, service, logConfig) =>
 
 
 
+// =======================================================================================
+// gestione globale delle eccezioni
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GloblalExceptionHandler>();
 
 
 

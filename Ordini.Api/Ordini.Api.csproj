@@ -39,7 +39,6 @@
 	<ItemGroup>
 	  <Folder Include="Helpers\" />
 	  <Folder Include="Hubs\" />
-	  <Folder Include="Exceptions\" />
 	  <Folder Include="Services\" />
 	  <Folder Include="Filters\" />
 	</ItemGroup>
