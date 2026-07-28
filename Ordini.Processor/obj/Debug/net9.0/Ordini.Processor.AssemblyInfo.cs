@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ordini.Processor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fbcf8db11df75b76678ee716b084666b91d3facb")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ordini.Processor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ordini.Processor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
