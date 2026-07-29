@@ -28,13 +28,12 @@
         <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.2" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Models\" />
+    </ItemGroup>
+    <ItemGroup>
       <Reference Include="Ordini.Contracts">
         <HintPath>..\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.dll</HintPath>
       </Reference>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Models\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 	
 </Project>

@@ -1,4 +1,5 @@
 using Ordini.Processor;
+using Ordini.Processor.Domains.Repositories.Dapper;
 using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
@@ -46,9 +47,21 @@ Log.Logger = new LoggerConfiguration()
 builder.Logging.AddSerilog();
 
 
+// =======================================================================================
+//  aggiunta servizio
+builder.Services.AddScoped<OrdineRepositoryReader>();
 
+
+
+// =======================================================================================
 //registrazione del processo in background
 builder.Services.AddHostedService<Worker>();
 
+
+
+
+
+// =======================================================================================
+//
 var host = builder.Build();
 host.Run();
