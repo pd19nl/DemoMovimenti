@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Ordini.Contracts;
+using Serilog;
 using Serilog.Events;
 using Serilog.Exceptions;
 using Serilog.Formatting.Compact;
