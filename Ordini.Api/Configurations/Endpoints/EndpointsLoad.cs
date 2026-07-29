@@ -79,22 +79,23 @@ namespace Ordini.Api.Configurations.Endpoints
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
                 //si usa routing key descrittiva
-                channel.ExchangeDeclare("movimenti.saga.eventi.exchange.ordini", ExchangeType.Topic, durable: true);
+                string nomeExchange = PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI;
+                channel.ExchangeDeclare(nomeExchange, ExchangeType.Topic, durable: true);
                 channel.BasicPublish(
-                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI,
+                    exchange: nomeExchange,
                     routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE_CREAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
 
-                return Results.Accepted(value: new RispostaAddOrdineDTO() { IdSaga = o.Id });
+                return Results.Accepted(value: new RispostaAddEditOrdineDTO() { IdSaga = o.Id });
             })
-                .WithName("RichiediNuovoOrdine")
-                .AddEndpointFilter<ValidationFilter<AddOrdineDTO>>() //validazione del dato di ingresso
-                                                                     // solo per test disabilitato
-                                                                     // .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
-                                                                     // solo per test abilitato
-                .AllowAnonymous();
+            .WithName("RichiediNuovoOrdine")
+            .AddEndpointFilter<ValidationFilter<AddOrdineDTO>>() //validazione del dato di ingresso
+                                                                 // solo per test disabilitato
+                                                                 // .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
+                                                                 // solo per test abilitato
+            .AllowAnonymous();
 
         }
 
@@ -127,22 +128,20 @@ namespace Ordini.Api.Configurations.Endpoints
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
                 //si usa routing key descrittiva
-                channel.ExchangeDeclare("movimenti.saga.eventi.exchange.ordini", ExchangeType.Topic, durable: true);
+                string nomeExchange = PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI;
+                channel.ExchangeDeclare(nomeExchange, ExchangeType.Topic, durable: true);
                 channel.BasicPublish(
-                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI,
+                    exchange: nomeExchange,
                     routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE_MODIFICA,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
 
-                return Results.Accepted(value: new RispostaAddOrdineDTO() { IdSaga = o.Id });
+                return Results.Accepted(value: new RispostaAddEditOrdineDTO() { IdSaga = o.Id });
             })
-                .WithName("RichiediNuovoOrdine")
-                .AddEndpointFilter<ValidationFilter<AddOrdineDTO>>() //validazione del dato di ingresso
-                                                                     // solo per test disabilitato
-                                                                     // .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
-                                                                     // solo per test abilitato
-                .AllowAnonymous();
+            .WithName("RichiediNuovoOrdine")
+            .AddEndpointFilter<ValidationFilter<EditOrdineDTO>>() //validazione del dato di ingresso
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
 
         }
 
