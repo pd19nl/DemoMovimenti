@@ -17,6 +17,7 @@
                 public const string ROOT = "movimenti.saga.eventi.exchange.";
                 public const string ORDINI = "ordini";
 
+                public static string NomeExchangeOrdini { get => ROOT + ORDINI; }
             }
             public static class CHIAVE_EVENTO
             {
@@ -24,6 +25,7 @@
                 public const string ORDINE_CREAZIONE = "api.ordine.creazione.richiesta";
                 //"api.ordine.modifica.richiesta"
                 public const string ORDINE_MODIFICA = "api.ordine.modifica.richiesta";
+                public const string ORDINE_CANCELLAZIONE = "api.ordine.cancellazione.richiesta";
             }
         }
     }

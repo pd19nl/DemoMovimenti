@@ -25,6 +25,7 @@ namespace Ordini.Api.Configurations.Endpoints
             Endpoint_Ordini_GetById(app, ordiniGroup);
             Endpoint_Ordini_AddOrdine(app, ordiniGroup);
             Endpoint_Ordini_EditOrdine(app, ordiniGroup);
+            Endpoint_Ordini_DeleteOrdine(app, ordiniGroup);
         }
 
         private static void Endpoint_Root(IEndpointRouteBuilder app)
@@ -78,11 +79,10 @@ namespace Ordini.Api.Configurations.Endpoints
 
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
-                //si usa routing key descrittiva
-                string nomeExchange = PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI;
-                channel.ExchangeDeclare(nomeExchange, ExchangeType.Topic, durable: true);
+                //si usa routing key descrittiva                
+                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini, ExchangeType.Topic, durable: true);
                 channel.BasicPublish(
-                    exchange: nomeExchange,
+                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                     routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE_CREAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
@@ -127,11 +127,10 @@ namespace Ordini.Api.Configurations.Endpoints
 
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
-                //si usa routing key descrittiva
-                string nomeExchange = PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ROOT + PARAMETRI_GLOBALI.QUEUE.EXCHANGE.ORDINI;
-                channel.ExchangeDeclare(nomeExchange, ExchangeType.Topic, durable: true);
+                //si usa routing key descrittiva                
+                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini, ExchangeType.Topic, durable: true);
                 channel.BasicPublish(
-                    exchange: nomeExchange,
+                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                     routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE_MODIFICA,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
@@ -144,6 +143,49 @@ namespace Ordini.Api.Configurations.Endpoints
             .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
 
         }
+
+
+        private static void Endpoint_Ordini_DeleteOrdine(IEndpointRouteBuilder app, RouteGroupBuilder ordiniGroup)
+        {
+            ordiniGroup.MapDelete("/{id:guid}", async (Guid id, IModel channel, OrdineRepositoryReader ordineRepositoryReader) =>
+            {
+                //lettura ordine origine
+                Ordine ordineOrigine = await ordineRepositoryReader.GetOrdineByIdAsync(id.ToString());
+
+                if (ordineOrigine == null)
+                    return Results.NotFound();
+
+
+                //creazione evento richiesta cancellazione 
+                OrdineCancellazioneRichiestaEvent eventoCancellazione = new OrdineCancellazioneRichiestaEvent();
+                Guid IdSaga = Guid.NewGuid();
+                eventoCancellazione.IdSaga = IdSaga;
+                eventoCancellazione.IdOrdine = id.ToString();
+
+                //serializzazione messaggio per Service Bus
+                string eventoRichiestoSerializzato = JsonSerializer.Serialize(eventoCancellazione);
+
+                //caso RabbitMQ
+                var bodyMessaggioRabbitMQ = Encoding.UTF8.GetBytes(eventoRichiestoSerializzato);
+
+                //pubblicazione su exchange degli eventi di tipo TOPIC --> 
+                //permette di avere più consumatori per lo stesso evento
+                //si usa routing key descrittiva                
+                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini, ExchangeType.Topic, durable: true);
+                channel.BasicPublish(
+                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE_CANCELLAZIONE,
+                    basicProperties: null,
+                    body: bodyMessaggioRabbitMQ);
+
+
+                return Results.Accepted(value: new RispostaAddEditOrdineDTO() { IdSaga = IdSaga.ToString() });
+            })
+            .WithName("RichiediCancellazioneOrdine")
+            .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
+
+        }
+
 
     }
 }
