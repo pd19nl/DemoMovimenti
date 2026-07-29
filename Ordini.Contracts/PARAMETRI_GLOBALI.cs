@@ -1,4 +1,4 @@
-﻿namespace Ordini.Api.Configurations
+﻿namespace Ordini.Contracts
 {
     public static class PARAMETRI_GLOBALI
     {
