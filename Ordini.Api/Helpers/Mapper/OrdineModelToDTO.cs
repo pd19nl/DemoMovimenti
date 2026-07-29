@@ -1,4 +1,4 @@
-﻿using Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno;
+﻿using Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura;
 using Ordini.Contracts.Models;
 
 namespace Ordini.Api.Helpers.Mapper

@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Ordini.Api.Domains.Repositories.Dapper;
+using Ordini.Api.Filters;
 using Ordini.Api.Helpers.Mapper;
-using Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Creazione;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura;
 using Ordini.Contracts.Events.Ordine;
 using Ordini.Contracts.Models;
+using RabbitMQ.Client;
+using System.Text;
+using System.Text.Json;
 
 namespace Ordini.Api.Configurations.Endpoints
 {
@@ -49,26 +54,46 @@ namespace Ordini.Api.Configurations.Endpoints
 
         private static void Endpoint_Ordini_AddOrdine(IEndpointRouteBuilder app, RouteGroupBuilder ordiniGroup)
         {
-            //ordiniGroup.MapPost("/", (AddOrdineDTO nuovoOrdine, IModel channel) =>
-            //{
-            //    Ordine o = OrdineDTOToModel.MapOrdine(nuovoOrdine);
-            //    o.Id = Guid.NewGuid().ToString();
+            ordiniGroup.MapPost("/", (AddOrdineDTO nuovoOrdine, IModel channel) =>
+            {
+                //il dato lo converto nel modello applicativo
+                Ordine o = OrdineDTOToModel.MapOrdine(nuovoOrdine);
+                Guid IdSaga = Guid.NewGuid();
+                o.Id = IdSaga.ToString();
 
-            //creazione evento
-            OrdineCreatoEvent eventoCreato = new OrdineCreatoEvent();
-            //eventoCreato.
-            //OrdineRichiestoEvent evento = new OrdineRichiestoEvent
-            //{
-            //    IdSaga = o.Id,
-            //    Ordine
-            //}
-            ////serializzazione messaggio per Service Bus
-            //string ordineSerializzato = System.Text.Json.JsonSerializer.SerializeToUtf8Bytes<AddOrdineDTO>(nuovoOrdine);
+                //creazione evento creato alla base dell'evento richiesto
+                OrdineCreatoEvent eventoCreato = OrdineModelToEvent.MapOrdineCreato(o);
+                //creazione evento richiesto
+                OrdineRichiestoEvent eventoRichiesto = new OrdineRichiestoEvent
+                {
+                    IdSaga = IdSaga,
+                    Ordine = eventoCreato
+                };
+                //serializzazione messaggio per Service Bus
+                string eventoRichiestoSerializzato = JsonSerializer.Serialize(eventoRichiesto);
 
-            ////caso RabbitMQ
-            //var properties =
+                //caso RabbitMQ
+                var bodyMessaggioRabbitMQ = Encoding.UTF8.GetBytes(eventoRichiestoSerializzato);
 
-            //}
+                //pubblicazione su exchange degli eventi di tipo TOPIC --> 
+                //permette di avere più consumatori per lo stesso evento
+                //si usa routing key descrittiva
+                channel.ExchangeDeclare("movimenti.saga.eventi.exchange.ordini", ExchangeType.Topic, durable: true);
+                channel.BasicPublish(
+                    exchange: "movimenti.saga.eventi.exchange.ordini",
+                    routingKey: "api.ordine.richiesta",
+                    basicProperties: null,
+                    body: bodyMessaggioRabbitMQ);
+
+
+                return Results.Accepted(value: new RispostaAddOrdineDTO() { IdSaga = o.Id });
+            })
+                .WithName("RichiediNuovoOrdine")
+                .AddEndpointFilter<ValidationFilter<AddOrdineDTO>>() //validazione del dato di ingresso
+                                                                     // solo per test disabilitato
+                                                                     // .RequireAuthorization(new AuthorizeAttribute { Roles = "DataEntry, Admin" });
+                                                                     // solo per test abilitato
+                .AllowAnonymous();
 
         }
     }

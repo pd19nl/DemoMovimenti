@@ -1,4 +1,4 @@
-﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno
+﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura
 {
     public class OrdineDTO
     {

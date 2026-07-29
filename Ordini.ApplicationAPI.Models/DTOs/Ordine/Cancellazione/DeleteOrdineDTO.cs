@@ -5,5 +5,7 @@
 
         public string Id { get; set; } = string.Empty;
 
+        public string IdSaga { get; set; } = string.Empty;
+
     }
 }

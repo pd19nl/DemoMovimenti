@@ -40,25 +40,30 @@ Write-Host "3.0) Creazione Progetti"
 	dotnet new webapi -n Ordini.Api -o Ordini.Api -f $Framework
 	#	---- --------------------------------------------------------------------------
 	
+
 	#	---- creazione Progetto Worker : Ordini.Processor
 	Write-Host "3.2) Creazione Progetto Worker: Ordini.Processor"
 	dotnet new worker -n Ordini.Processor -o Ordini.Processor -f $Framework
 	#	---- --------------------------------------------------------------------------
 	
+
 	#	---- creazione Progetto Worker: Pagamenti.Processor
 	Write-Host "3.3) Creazione Progetto Worker: Pagamenti.Processor"
 	dotnet new worker -n Pagamenti.Processor -o Pagamenti.Processor -f $Framework
 	#	---- --------------------------------------------------------------------------
+
 
 	#	---- creazione Progetto Worker: Inventario.Processor
 	Write-Host "3.4) Creazione Progetto Worker: Inventario.Processor"
 	dotnet new worker -n Inventario.Processor -o Inventario.Processor -f $Framework
 	#	---- --------------------------------------------------------------------------
 
+
 	#	---- creazione Progetto Worker: Notifiche.Processor
 	Write-Host "3.5) Creazione Progetto Worker: Notifiche.Processor"
 	dotnet new worker -n Notifiche.Processor -o Notifiche.Processor -f $Framework
 	#	---- --------------------------------------------------------------------------
+
 
 	#	---- creazione Progetto Libreria : Ordini.Contracts
 	Write-Host "3.6) Creazione Progetto Libreria: Ordini.Contracts"
@@ -70,6 +75,25 @@ Write-Host "3.0) Creazione Progetti"
 	Write-Host "3.7) Creazione Progetto Libreria: Ordini.ApplicationAPI.Models"
 	dotnet new classlib -n Ordini.ApplicationAPI.Models -o Ordini.ApplicationAPI.Models -f $Framework
 	#	---- --------------------------------------------------------------------------
+
+	
+	#	---- creazione Progetto Libreria : Ordini.ApplicationAPI.Models
+	Write-Host "3.7) Creazione Progetto Libreria: Ordini.ApplicationAPI.Models"
+	dotnet new classlib -n Ordini.ApplicationAPI.Models -o Ordini.ApplicationAPI.Models -f $Framework
+	#	---- --------------------------------------------------------------------------
+
+		
+	#	---- creazione Progetto Libreria : Ordini.ApplicationAPI.Models
+	Write-Host "3.7) Creazione Progetto Libreria: Ordini.ApplicationAPI.Models"
+	dotnet new classlib -n Ordini.ApplicationAPI.Models -o Ordini.ApplicationAPI.Models -f $Framework
+	#	---- --------------------------------------------------------------------------
+	
+		
+	#	---- creazione Progetto Libreria : Ordini.LySystem.Models.Repositories
+	#Write-Host "3.8) Creazione Progetto Libreria: Ordini.LySystem.Models.Repositories"
+	#dotnet new classlib -n Ordini.LySystem.Models.Repositories -o Ordini.LySystem.Models.Repositories -f $Framework
+	#	---- --------------------------------------------------------------------------
+
 
 #	---- --------------------------------------------------------------------------
 #	---- --------------------------------------------------------------------------
@@ -84,25 +108,30 @@ Write-Host "4.0) Associazione Progetti alla Soluzione"
 	dotnet sln add "Ordini.Api/Ordini.Api.csproj"
 	#	---- --------------------------------------------------------------------------
 
+
 	#	---- --------------------------------------------------------------------------
 	Write-Host "4.2) Aggiunta Progetto Notifiche.Processor alla soluzione"
 	dotnet sln add "Notifiche.Processor/Notifiche.Processor.csproj"
 	#	---- --------------------------------------------------------------------------
+
 
 	#	---- --------------------------------------------------------------------------
 	Write-Host "4.3) Aggiunta Progetto Ordini.Processor alla soluzione"
 	dotnet sln add "Ordini.Processor/Ordini.Processor.csproj"
 	#	---- --------------------------------------------------------------------------
 
+
 	#	---- --------------------------------------------------------------------------
 	Write-Host "4.4) Aggiunta Progetto Pagamenti.Processor alla soluzione"
 	dotnet sln add "Pagamenti.Processor/Pagamenti.Processor.csproj"
 	#	---- --------------------------------------------------------------------------
 
+
 	#	---- --------------------------------------------------------------------------
 	Write-Host "4.5) Aggiunta Progetto Inventario.Processor alla soluzione"
 	dotnet sln add "Inventario.Processor/Inventario.Processor.csproj"
 	#	---- --------------------------------------------------------------------------
+
 
 	#	---- --------------------------------------------------------------------------
 	Write-Host "4.6) Aggiunta Progetto Libreria Ordini.Contracts alla soluzione"
@@ -115,6 +144,13 @@ Write-Host "4.0) Associazione Progetti alla Soluzione"
 	dotnet sln add "Ordini.ApplicationAPI.Models/Ordini.ApplicationAPI.Models.csproj"
 	#	---- --------------------------------------------------------------------------
 	
+	
+	#	---- --------------------------------------------------------------------------
+	#Write-Host "4.8) Aggiunta Progetto Libreria Ordini.LySystem.Models.Repositories alla soluzione"
+	#dotnet sln add "Ordini.LySystem.Models.Repositories/Ordini.LySystem.Models.Repositories.csproj"
+	#	---- --------------------------------------------------------------------------
+
+
 #	---- --------------------------------------------------------------------------
 #	---- --------------------------------------------------------------------------
 
