@@ -11,7 +11,7 @@ namespace Ordini.Api.Domains.Repositories.Dapper
 
         public OrdineRepositoryReader(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB_MAIN_R)!;
+            _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.MAIN_R)!;
         }
 
 

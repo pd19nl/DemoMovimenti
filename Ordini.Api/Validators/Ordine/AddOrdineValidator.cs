@@ -21,11 +21,11 @@ namespace Ordini.Api.Validators.Ordine
             //    .MaximumLength(10).WithMessage("Lunghezza Massima Codice Ordine 10");
 
 
-            RuleFor(o => o.Dettagli)
+            RuleFor(o => o.Prodotti)
                .NotEmpty()
                 .WithMessage("L'ordine deve contenere almeno un articolo");
 
-            RuleForEach(o => o.Dettagli).SetValidator(new AddDettaglioOrdineValidator());
+            RuleForEach(o => o.Prodotti).SetValidator(new AddDettaglioOrdineValidator());
         }
     }
 }

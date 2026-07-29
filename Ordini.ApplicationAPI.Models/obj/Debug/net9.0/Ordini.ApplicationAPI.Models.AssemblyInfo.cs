@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ordini.ApplicationAPI.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+63f117b1c329b80ae015a04b3136a2d75539e346")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d726c8a143de1da766c950b7287e858b21408f1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ordini.ApplicationAPI.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ordini.ApplicationAPI.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

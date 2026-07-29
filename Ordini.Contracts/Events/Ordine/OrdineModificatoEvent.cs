@@ -6,11 +6,13 @@
     /// </summary>
     public class OrdineModificatoEvent
     {
-        public Guid IdSaga { get; set; } = Guid.NewGuid();
+        public Guid IdSaga { get; set; }
 
         public string IdOrdine { get; set; } = string.Empty;
 
-        public Ordini.Contracts.Models.Ordine DatoModificato { get; set; }
+        public DateTime Data { get; set; } = DateTime.Now;
+        //il contenuto del dato modificato
+        public Ordini.Contracts.Models.Ordine Dato { get; set; }
     }
 
 }

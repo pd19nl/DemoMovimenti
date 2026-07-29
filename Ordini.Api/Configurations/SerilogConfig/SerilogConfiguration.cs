@@ -13,7 +13,7 @@ namespace Ordini.Api.Configurations.SerilogConfig
         {
             var httpContextAccessor = services.GetRequiredService<IHttpContextAccessor>();
             var httpContextEnricher = new HttpContextEnricher(httpContextAccessor);
-            var connectionStringLogs = context.Configuration.GetConnectionString("LogsDbConString");
+            var connectionStringLogs = context.Configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.LOG_ADM);
 
             configuration
                 .ReadFrom.Configuration(context.Configuration)

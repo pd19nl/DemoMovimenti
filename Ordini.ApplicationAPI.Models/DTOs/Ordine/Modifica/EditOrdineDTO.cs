@@ -9,6 +9,6 @@
 
         public string? Note { get; set; }
 
-        List<EditDettaglioOrdineDTO> Dettagli { get; set; } = new List<EditDettaglioOrdineDTO>();
+        public List<EditDettaglioOrdineDTO> Prodotti { get; set; } = new List<EditDettaglioOrdineDTO>();
     }
 }

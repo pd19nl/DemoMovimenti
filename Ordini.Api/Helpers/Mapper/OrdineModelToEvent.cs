@@ -30,5 +30,17 @@ namespace Ordini.Api.Helpers.Mapper
 
             return dr;
         }
+
+
+
+        public static OrdineModificatoEvent MapOrdineModificato(Ordine ordine)
+        {
+            OrdineModificatoEvent r = new OrdineModificatoEvent();
+            r.IdOrdine = ordine.Id;
+            r.Dato = ordine;
+            return r;
+        }
+
+
     }
 }

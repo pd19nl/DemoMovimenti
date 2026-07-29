@@ -15,6 +15,6 @@
 
         public string? Note { get; set; }
 
-        public List<AddDettaglioOrdineDTO> Dettagli { get; set; } = new List<AddDettaglioOrdineDTO>();
+        public List<AddDettaglioOrdineDTO> Prodotti { get; set; } = new List<AddDettaglioOrdineDTO>();
     }
 }

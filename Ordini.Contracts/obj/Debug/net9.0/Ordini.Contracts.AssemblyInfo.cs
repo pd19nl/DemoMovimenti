@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Ordini.Contracts")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb2b4cede56c7c64f86173f6d797c2d2472c22bf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d726c8a143de1da766c950b7287e858b21408f1e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Ordini.Contracts")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Ordini.Contracts")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
