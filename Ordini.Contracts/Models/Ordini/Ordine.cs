@@ -1,4 +1,4 @@
-﻿namespace Ordini.Contracts.Models
+﻿namespace Ordini.Contracts.Models.Ordini
 {
     public class Ordine
     {

@@ -1,4 +1,6 @@
 ﻿using Ordini.Contracts;
+using Ordini.Contracts.Events.Ordine;
+using Ordini.Contracts.Models.OutBox;
 
 namespace Ordini.Processor.Domains.Repositories.Dapper
 {
@@ -11,6 +13,16 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
         {
             _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.MAIN_R)!;
             _logger = logger;
+        }
+
+        /// attivazione pattern outbox perchè è la parte che crea su tabella e quindi ci deve essere anche
+        /// la registrazione sicura dell'evento successivo
+        /// 
+        public async Task<(string nuovoId, OutBoxMessage outbox)> CreazioneOrderInOutBoxAsync(OrdineRichiestoEvent nuovoOrdine)
+        {
+
+
+
         }
 
 

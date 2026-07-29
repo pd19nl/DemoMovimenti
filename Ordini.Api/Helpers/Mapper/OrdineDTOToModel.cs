@@ -1,6 +1,6 @@
 ﻿using Ordini.ApplicationAPI.Models.DTOs.Ordine.Creazione;
 using Ordini.ApplicationAPI.Models.DTOs.Ordine.Modifica;
-using Ordini.Contracts.Models;
+using Ordini.Contracts.Models.Ordini;
 
 namespace Ordini.Api.Helpers.Mapper
 {

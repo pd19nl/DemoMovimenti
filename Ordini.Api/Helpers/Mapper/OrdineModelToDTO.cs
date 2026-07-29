@@ -1,5 +1,5 @@
 ﻿using Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura;
-using Ordini.Contracts.Models;
+using Ordini.Contracts.Models.Ordini;
 
 namespace Ordini.Api.Helpers.Mapper
 {

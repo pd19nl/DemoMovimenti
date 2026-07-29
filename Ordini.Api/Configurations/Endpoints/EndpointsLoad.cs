@@ -7,7 +7,7 @@ using Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura;
 using Ordini.ApplicationAPI.Models.DTOs.Ordine.Modifica;
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Ordine;
-using Ordini.Contracts.Models;
+using Ordini.Contracts.Models.Ordini;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;

@@ -12,7 +12,7 @@
 
         public DateTime Data { get; set; } = DateTime.Now;
         //il contenuto del dato modificato
-        public Ordini.Contracts.Models.Ordine Dato { get; set; }
+        public Models.Ordini.Ordine Dato { get; set; }
     }
 
 }

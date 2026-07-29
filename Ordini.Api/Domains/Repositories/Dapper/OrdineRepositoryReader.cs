@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
 using Ordini.Contracts;
-using Ordini.Contracts.Models;
+using Ordini.Contracts.Models.Ordini;
 
 namespace Ordini.Api.Domains.Repositories.Dapper
 {
