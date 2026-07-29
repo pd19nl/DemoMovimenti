@@ -39,7 +39,7 @@ namespace Ordini.Api.Domains.Repositories.Dapper
                 string sqlDettaglioOrdine = @"select * from DettagliOrdine where IdOrdine = @id";
                 IEnumerable<DettaglioOrdine> elencoDettagli = await sqlconnection.QueryAsync<DettaglioOrdine>(sqlDettaglioOrdine, new { id });
 
-                o.Dettagli.AddRange(elencoDettagli);
+                o.Prodotti.AddRange(elencoDettagli);
                 //o.Dettagli= elencoDettagli.ToList();
 
                 return o;

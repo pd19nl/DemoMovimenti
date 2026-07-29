@@ -2,8 +2,9 @@
 {
 
     /// <summary>
-    /// richiesta di ordine da parte del glient:
+    /// richiesta di ordine da parte del client:
     /// avvio saga
+    /// tutti i dati ripetuti per non accedere all'ordine
     /// </summary>
     public class OrdineRichiestoEvent
     {

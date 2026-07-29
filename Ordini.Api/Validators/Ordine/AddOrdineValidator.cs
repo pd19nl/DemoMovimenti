@@ -15,10 +15,10 @@ namespace Ordini.Api.Validators.Ordine
             RuleFor(o => o.Data)
                 .LessThanOrEqualTo(DateTime.Now).WithMessage("La data non può essere futura");
 
-            RuleFor(o => o.Id)
-               .NotEmpty()
-                .WithMessage("Il Codice Ordine è obbligatorio")
-                .MaximumLength(10).WithMessage("Lunghezza Massima Codice Ordine 10");
+            //RuleFor(o => o.Id)
+            //   .NotEmpty()
+            //    .WithMessage("Il Codice Ordine è obbligatorio")
+            //    .MaximumLength(10).WithMessage("Lunghezza Massima Codice Ordine 10");
 
 
             RuleFor(o => o.Dettagli)

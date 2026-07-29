@@ -1,29 +1,29 @@
-﻿using Ordini.ApplicationAPI.Models.DTOs.Ordine.Ritorno;
+﻿using Ordini.Contracts.Events.Ordine;
 using Ordini.Contracts.Models;
 
 namespace Ordini.Api.Helpers.Mapper
 {
-    public static class OrdineModelToDTO
+    public static class OrdineModelToEvent
     {
-        public static OrdineDTO MapOrdine(Ordine ordine)
+        public static OrdineCreatoEvent MapOrdineCreato(Ordine ordine)
         {
-            OrdineDTO r = new OrdineDTO();
+            OrdineCreatoEvent r = new OrdineCreatoEvent();
             r.Note = ordine.Note;
             r.IdCliente = ordine.IdCliente;
             r.Data = ordine.Data;
-            r.Id = ordine.Id;
+            r.IdOrdine = ordine.Id;
 
             foreach (DettaglioOrdine d in ordine.Prodotti)
             {
-                r.Dettagli.Add(MapDettaglioOrdine(d));
+                r.Prodotti.Add(MapDettaglioOrdine(d));
             }
             return r;
         }
 
-        private static DettaglioOrdineDTO MapDettaglioOrdine(DettaglioOrdine dettaglio)
+        private static DettaglioProdottoEvent MapDettaglioOrdine(DettaglioOrdine dettaglio)
         {
-            DettaglioOrdineDTO dr = new DettaglioOrdineDTO();
-            dr.Id = dettaglio.Id;
+            DettaglioProdottoEvent dr = new DettaglioProdottoEvent();
+            //dr.Id = dettaglio.Id;
             dr.Qta = dettaglio.Qta;
             dr.CodiceArticolo = dettaglio.CodiceArticolo;
             dr.Prezzo = dettaglio.Prezzo;
