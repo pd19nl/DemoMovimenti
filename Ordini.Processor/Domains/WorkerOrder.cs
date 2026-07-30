@@ -14,7 +14,6 @@ namespace Ordini.Processor;
 public class WorkerOrder : BackgroundService
 {
     private readonly ILogger<WorkerOrder> _logger;
-    private readonly OrdineRepositoryReader _dbOperation;
     private readonly IServiceProvider _serviceProvider;
     private readonly IConnection _rabbitConnection;
     private IModel? _channel;
@@ -22,15 +21,14 @@ public class WorkerOrder : BackgroundService
 
     public WorkerOrder(ILogger<WorkerOrder> logger,
         IServiceProvider serviceProvider,
-        OrdineRepositoryReader ordineRepositoryReader,
         IConnection connection
         )
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
-        _dbOperation = ordineRepositoryReader;
         _rabbitConnection = connection;
     }
+
 
     //avvio worker - procedura di associazione alla coda RabbitMQ per i messaggi di interesse
     public override Task StartAsync(CancellationToken stoppingToken)
