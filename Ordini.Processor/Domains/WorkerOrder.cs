@@ -11,16 +11,16 @@ using System.Text.Json;
 
 namespace Ordini.Processor;
 
-public class Worker : BackgroundService
+public class WorkerOrder : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<WorkerOrder> _logger;
     private readonly OrdineRepositoryReader _dbOperation;
     private readonly IServiceProvider _serviceProvider;
     private readonly IConnection _rabbitConnection;
     private IModel? _channel;
 
 
-    public Worker(ILogger<Worker> logger,
+    public WorkerOrder(ILogger<WorkerOrder> logger,
         IServiceProvider serviceProvider,
         OrdineRepositoryReader ordineRepositoryReader,
         IConnection connection

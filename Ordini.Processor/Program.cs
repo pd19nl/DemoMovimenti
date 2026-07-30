@@ -48,16 +48,12 @@ builder.Logging.AddSerilog();
 
 
 // =======================================================================================
-//  aggiunta servizio
+//  aggiunta servizio di elaborazione ordini
 builder.Services.AddScoped<OrdineRepositoryReader>();
-
-
 
 // =======================================================================================
 //registrazione del processo in background
-builder.Services.AddHostedService<Worker>();
-
-
+builder.Services.AddHostedService<WorkerOrder>();
 
 
 
