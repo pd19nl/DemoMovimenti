@@ -149,7 +149,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
             #endregion
         }
 
-        public async Task UpdateStatoOrdineAsync(string idOrdine, string idSaga,
+        public async Task<bool> UpdateStatoOrdineAsync(string idOrdine, string idSaga,
                                                 eOrdineStato idStatoFinale,
                                                 string motivo = "")
         {
@@ -169,7 +169,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
             #region aggiornamento ordine
             string updord = "update dbo.ORDINI set " +
                             "ID_STATO = @stato, " +
-                            "NOTE = @note " +
+                            "NOTE = isnull(NOTE,'') + '-' + @note " +
                             "where ID =@id";
 
             _logger.LogInformation("Aggiornamento ordine: {0}", updord);
@@ -179,7 +179,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                                                 stato = idStatoFinale
                                              } };
 
-            await sqlConnection.ExecuteAsync(updord, updordparameters, sqlTransaction);
+            var nrRigheAggiornate = await sqlConnection.ExecuteAsync(updord, updordparameters, sqlTransaction);
             #endregion
 
             //Registrazione Workflow ordine
@@ -191,6 +191,8 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                                         OperationDate
                                     );
             #endregion
+
+            return nrRigheAggiornate == 1;
 
         }
     }

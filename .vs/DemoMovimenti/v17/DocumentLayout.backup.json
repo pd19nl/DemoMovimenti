@@ -3,12 +3,28 @@
   "WorkspaceRootPath": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.processor\\domains\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|solutionrelative:ordini.processor\\domains\\worker.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.contracts\\models\\ordini\\eordinestato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|solutionrelative:ordini.contracts\\models\\ordini\\eordinestato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.contracts\\parametri_globali.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|solutionrelative:ordini.contracts\\parametri_globali.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{603F7A63-6731-4138-A867-392121FACFCB}|Ordini.Api\\Ordini.Api.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.api\\configurations\\endpoints\\endpointsload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{603F7A63-6731-4138-A867-392121FACFCB}|Ordini.Api\\Ordini.Api.csproj|solutionrelative:ordini.api\\configurations\\endpoints\\endpointsload.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|solutionrelative:ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.contracts\\models\\outbox\\outboxmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7DD151F-2087-4B76-B9E6-D96B8030E8D4}|Ordini.Contracts\\Ordini.Contracts.csproj|solutionrelative:ordini.contracts\\models\\outbox\\outboxmessage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,33 +37,85 @@
           "SelectedChildIndex": 1,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-07-29T14:24:17.581Z",
+              "DocumentIndex": 2,
+              "Title": "PARAMETRI_GLOBALI.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\PARAMETRI_GLOBALI.cs",
+              "RelativeDocumentMoniker": "Ordini.Contracts\\PARAMETRI_GLOBALI.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\PARAMETRI_GLOBALI.cs",
+              "RelativeToolTip": "Ordini.Contracts\\PARAMETRI_GLOBALI.cs",
+              "ViewState": "AgIAACwAAAAAAAAAAAAjwDgAAABMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T07:35:31.334Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "Worker.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Domains\\Worker.cs",
+              "RelativeDocumentMoniker": "Ordini.Processor\\Domains\\Worker.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Domains\\Worker.cs",
+              "RelativeToolTip": "Ordini.Processor\\Domains\\Worker.cs",
+              "ViewState": "AgIAAJQAAAAAAAAAAAAYwKUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T07:31:58.1Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeDocumentMoniker": "Ordini.Processor\\Program.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeToolTip": "Ordini.Processor\\Program.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAAADMAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T07:31:19.488Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "OutBoxMessage.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\Models\\OutBox\\OutBoxMessage.cs",
+              "RelativeDocumentMoniker": "Ordini.Contracts\\Models\\OutBox\\OutBoxMessage.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\Models\\OutBox\\OutBoxMessage.cs",
+              "RelativeToolTip": "Ordini.Contracts\\Models\\OutBox\\OutBoxMessage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAABeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T06:54:58.672Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "EndpointsLoad.cs",
               "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Api\\Configurations\\Endpoints\\EndpointsLoad.cs",
               "RelativeDocumentMoniker": "Ordini.Api\\Configurations\\Endpoints\\EndpointsLoad.cs",
               "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Api\\Configurations\\Endpoints\\EndpointsLoad.cs",
               "RelativeToolTip": "Ordini.Api\\Configurations\\Endpoints\\EndpointsLoad.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFcAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAK4AAAAAAAAAAAAiwLcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-07-29T13:45:49.208Z",
+              "WhenOpened": "2026-07-30T06:25:02.037Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "eOrdineStato.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\Models\\Ordini\\eOrdineStato.cs",
+              "RelativeDocumentMoniker": "Ordini.Contracts\\Models\\Ordini\\eOrdineStato.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Contracts\\Models\\Ordini\\eOrdineStato.cs",
+              "RelativeToolTip": "Ordini.Contracts\\Models\\Ordini\\eOrdineStato.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAgAAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-30T06:04:45.133Z",
               "EditorCaption": ""
             }
           ]

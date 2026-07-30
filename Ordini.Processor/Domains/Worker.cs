@@ -204,4 +204,16 @@ public class Worker : BackgroundService
                                             evento.Motivo);
     }
 
+
+
+    //chiusura worker: rilascio risorse
+    public override void Dispose()
+    {
+        _channel?.Close();
+        _channel?.Dispose();
+
+        base.Dispose();
+    }
+
+
 }
