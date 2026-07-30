@@ -78,17 +78,11 @@ Write-Host "3.0) Creazione Progetti"
 
 	
 	#	---- creazione Progetto Libreria : Ordini.ApplicationAPI.Models
-	Write-Host "3.7) Creazione Progetto Libreria: Ordini.ApplicationAPI.Models"
-	dotnet new classlib -n Ordini.ApplicationAPI.Models -o Ordini.ApplicationAPI.Models -f $Framework
-	#	---- --------------------------------------------------------------------------
+	Write-Host "3.8) Creazione Progetto Worker: OutBox.Processor"
+	dotnet new worker -n OutBox.Processor -o OutBox.Processor -f $Framework
+	#	---- 
+		
 
-		
-	#	---- creazione Progetto Libreria : Ordini.ApplicationAPI.Models
-	Write-Host "3.7) Creazione Progetto Libreria: Ordini.ApplicationAPI.Models"
-	dotnet new classlib -n Ordini.ApplicationAPI.Models -o Ordini.ApplicationAPI.Models -f $Framework
-	#	---- --------------------------------------------------------------------------
-	
-		
 	#	---- creazione Progetto Libreria : Ordini.LySystem.Models.Repositories
 	#Write-Host "3.8) Creazione Progetto Libreria: Ordini.LySystem.Models.Repositories"
 	#dotnet new classlib -n Ordini.LySystem.Models.Repositories -o Ordini.LySystem.Models.Repositories -f $Framework
@@ -144,7 +138,13 @@ Write-Host "4.0) Associazione Progetti alla Soluzione"
 	dotnet sln add "Ordini.ApplicationAPI.Models/Ordini.ApplicationAPI.Models.csproj"
 	#	---- --------------------------------------------------------------------------
 	
-	
+
+	#	---- --------------------------------------------------------------------------
+	Write-Host "4.8) Aggiunta Progetto OutBox.Processor alla soluzione"
+	dotnet sln add "OutBox.Processor/OutBox.Processor.csproj"
+	#	---- --------------------------------------------------------------------------
+
+
 	#	---- --------------------------------------------------------------------------
 	#Write-Host "4.8) Aggiunta Progetto Libreria Ordini.LySystem.Models.Repositories alla soluzione"
 	#dotnet sln add "Ordini.LySystem.Models.Repositories/Ordini.LySystem.Models.Repositories.csproj"
