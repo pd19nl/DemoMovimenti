@@ -53,6 +53,8 @@
                 public static class PAGAMENTO
                 {
                     public const string RESPINTO = "api.pagamento.respinto";
+
+                    public const string EFFETTUATO = "api.pagamento.riuscito";
                 }
 
             }
