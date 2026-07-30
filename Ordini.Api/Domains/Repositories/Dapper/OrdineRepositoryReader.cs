@@ -50,7 +50,7 @@ namespace Ordini.Api.Domains.Repositories.Dapper
 
             if (o != null)
             {
-                string sqlDettaglioOrdine = @"select * from DettagliOrdine where IdOrdine = @id";
+                string sqlDettaglioOrdine = @"select * from dbo.DettagliOrdine where IdOrdine = @id";
                 _logger.LogInformation("GetOrdineByIdAsync - Query Get dettaglio ordine: {0}", sqlDettaglioOrdine);
                 IEnumerable<DettaglioOrdine> elencoDettagli = await sqlconnection.QueryAsync<DettaglioOrdine>(sqlDettaglioOrdine, new { id });
 
