@@ -26,7 +26,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
         public async Task<(string nuovoId, OutBoxMessage outbox)> CreazioneOrderOutBoxAsync(OrdineRichiestoEvent nuovoOrdine)
         {
             _logger.LogInformation("Apertura connessione");
-            using var sqlConnection = new SqlConnection(_connectionString);
+            using SqlConnection sqlConnection = new SqlConnection(_connectionString);
             await sqlConnection.OpenAsync();
 
             _logger.LogInformation("Apertura Transazione");
@@ -39,7 +39,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                 #region creazione ordine
                 string insord = "insert into dbo.ORDINI " +
                                     "(ID, DATA_CREAZIONE, ID_CLIENTE, NOTE, ID_STATO) " +
-                                    "values (@id, @data, @idcliente, @note, @stsato)";
+                                    "values (@id, @data, @idcliente, @note, @stato)";
 
                 _logger.LogInformation("Step 1) inserimento ordine: {0}", insord);
 
@@ -47,7 +47,7 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                                                 data = OperationDate,
                                                 idcliente = nuovoOrdine.Ordine.IdCliente,
                                                 note=  nuovoOrdine.Ordine.Note,
-                                                stsato = (int)eOrdineStato.OK_InElaborazione
+                                                stato = (short)eOrdineStato.OK_InElaborazione
                                              } };
 
                 await sqlConnection.ExecuteAsync(insord, insordparameters, sqlTransaction);
@@ -75,6 +75,19 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                     await sqlConnection.ExecuteAsync(sqlinsorddet, sqlinsorddetparameters, sqlTransaction);
                 }
                 #endregion
+
+
+                //Registrazione Workflow ordine
+                #region registrazione workflow ordine
+                await RegistrazioneWorkflow(sqlConnection, sqlTransaction,
+                                            nuovoOrdine.Ordine.IdOrdine,
+                                            nuovoOrdine.IdSaga.ToString(),
+                                            eOrdineStato.OK_InElaborazione,
+                                            OperationDate
+                                        );
+                #endregion
+
+
 
                 #region creazione outbox
                 //3) popolamento OutBox
@@ -110,7 +123,75 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
 
         }
 
+        private async Task RegistrazioneWorkflow(SqlConnection sqlConnection,
+                                                DbTransaction sqlTransaction,
+                                                string idOrdine,
+                                                string idSaga,
+                                                eOrdineStato stato,
+                                                DateTime dataOperazione)
+        {
+
+            //Registrazione Workflow ordine
+            #region registrazione workflow ordine
+            string workfloword = "insert into dbo.ORDINI_WORKFLOW " +
+                                "(ID_ORDINE, DATA_OPERAZIONE, ID_STATO, ID_SAGA) " +
+                                "values (@id, @data, @stato, @idsaga)";
+
+            _logger.LogInformation("Registrazione workflow ordine: {0}", workfloword);
+
+            object[] wfordparameters = { new {   id = idOrdine,
+                                                     data = dataOperazione,
+                                                     stato = (short)stato,
+                                                     idsaga = idSaga
+                                             } };
+
+            await sqlConnection.ExecuteAsync(workfloword, wfordparameters, sqlTransaction);
+            #endregion
+        }
+
+        public async Task UpdateStatoOrdineAsync(string idOrdine, string idSaga,
+                                                eOrdineStato idStatoFinale,
+                                                string motivo = "")
+        {
+            _logger.LogInformation("Aggiornamento stato Ordine [{0}] allo stato [{1}] - Descr.: {2}",
+                                    idOrdine, idStatoFinale, motivo);
+
+            _logger.LogInformation("Apertura connessione");
+            using var sqlConnection = new SqlConnection(_connectionString);
+            await sqlConnection.OpenAsync();
 
 
+            _logger.LogInformation("Apertura Transazione");
+            using DbTransaction sqlTransaction = await sqlConnection.BeginTransactionAsync();
+
+            DateTime OperationDate = DateTime.Now;
+
+            #region aggiornamento ordine
+            string updord = "update dbo.ORDINI set " +
+                            "ID_STATO = @stato, " +
+                            "NOTE = @note " +
+                            "where ID =@id";
+
+            _logger.LogInformation("Aggiornamento ordine: {0}", updord);
+
+            object[] updordparameters = { new { id =idOrdine,
+                                                note=  motivo,
+                                                stato = idStatoFinale
+                                             } };
+
+            await sqlConnection.ExecuteAsync(updord, updordparameters, sqlTransaction);
+            #endregion
+
+            //Registrazione Workflow ordine
+            #region registrazione workflow ordine
+            await RegistrazioneWorkflow(sqlConnection, sqlTransaction,
+                                        idOrdine,
+                                        idSaga,
+                                        idStatoFinale,
+                                        OperationDate
+                                    );
+            #endregion
+
+        }
     }
 }

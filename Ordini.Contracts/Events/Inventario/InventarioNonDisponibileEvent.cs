@@ -9,6 +9,7 @@
     {
         public string IdOrdine { get; set; } = string.Empty;
 
+        public string IdSaga { get; set; } = string.Empty;
         public string Motivo { get; set; }
     }
 }

@@ -1,5 +1,7 @@
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Inventario;
 using Ordini.Contracts.Events.Pagamento;
+using Ordini.Contracts.Models.Ordini;
 using Ordini.Processor.Domains.Repositories.Dapper;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -129,25 +131,20 @@ public class Worker : BackgroundService
             switch (routingKey)
             {
                 case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE:
-                    await Gestione_Ordine_Richiesto(messaggio, ordineServiceDB);
+                    await Gestione_Ordine_Richiesta(messaggio, ordineServiceDB);
                     break;
 
                 case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO:
                     // caso fine saga con successo
-
                     await Gestione_Ordine_Completato(messaggio, ordineServiceDB);
                     break;
 
                 case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE:
-
-                    //  caso fallimento dalla saga da parte dell'inventario
-                    _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+                    await Gestione_Ordine_Inventario_NonDisponibile(messaggio, ordineServiceDB);
                     break;
 
                 case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO:
-                    //  caso fallimento dalla saga da parte del pagamento
-                    _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
-
+                    await Gestione_Ordine_Pagamento_Respinto(messaggio, ordineServiceDB);
                     break;
 
 
@@ -163,7 +160,7 @@ public class Worker : BackgroundService
         }
     }
 
-    private async Task Gestione_Ordine_Richiesto(string messaggio, OrdineRepositoryReader servizioDB)
+    private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryReader servizioDB)
     {
         _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
 
@@ -172,11 +169,34 @@ public class Worker : BackgroundService
 
     private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryReader servizioDB)
     {
-        var eventoSuccess = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
-        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
-        servizioDB.UpdateStatoOrdineAsync(eventoSuccess.IdOrdine, "Saga completata con successo");
+        var evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
+        await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
+                                            eOrdineStato.OK_OrdineConcluso,
+                                            "Saga completata con successo");
     }
 
 
+    private async Task Gestione_Ordine_Inventario_NonDisponibile(string messaggio, OrdineRepositoryReader servizioDB)
+    {
+        var evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
+        //  caso fallimento dalla saga da parte dell'inventario
+        _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+        await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
+                                            eOrdineStato.KO_ScorteNonPresenti,
+                                            evento.Motivo);
+    }
+
+
+    private async Task Gestione_Ordine_Pagamento_Respinto(string messaggio, OrdineRepositoryReader servizioDB)
+    {
+        var evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
+        //  caso fallimento dalla saga da parte del pagamento
+        _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
+
+        await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
+                                            eOrdineStato.KO_PagamentoFallito,
+                                            evento.Motivo);
+    }
 
 }

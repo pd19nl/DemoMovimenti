@@ -7,6 +7,7 @@
     /// </summary>
     public class PagamentoRiuscitoEvent
     {
+        public string IdSaga { get; set; } = string.Empty;
         public string IdOrdine { get; set; } = string.Empty;
     }
 }

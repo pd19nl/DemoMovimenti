@@ -9,6 +9,9 @@ namespace Ordini.Contracts.Events.Pagamento
     /// </summary>
     public class PagamentoFallitoEvent
     {
+
+        public string IdSaga { get; set; } = string.Empty;
+
         public string IdOrdine { get; set; } = string.Empty;
 
         public string Motivo { get; set; }
