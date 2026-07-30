@@ -1,4 +1,5 @@
-using OutBox.Processor;
+using OutBox.Processor.Domains;
+using OutBox.Processor.Domains.Repositories.Dapper;
 using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;

@@ -1,4 +1,4 @@
-namespace OutBox.Processor;
+namespace OutBox.Processor.Domains;
 
 public class WorkerOutBox : BackgroundService
 {
