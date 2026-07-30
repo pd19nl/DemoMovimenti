@@ -5,7 +5,7 @@
     {
         public Guid Id { get; set; }
         public DateTime DataCreazione { get; set; }
-        public string Type { get; set; } = string.Empty;
+        public string TipologiaEvento { get; set; } = string.Empty; //nome della classe evento
         public string Payload { get; set; } = string.Empty;
     }
 }

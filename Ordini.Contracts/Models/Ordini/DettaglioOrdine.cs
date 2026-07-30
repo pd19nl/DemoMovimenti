@@ -10,6 +10,6 @@
         public decimal Prezzo { get; set; }
 
 
-        public decimal ImportoTotale { get => Qta * Prezzo; }
+        public decimal ImportoTotale { get => (decimal)Qta * Prezzo; }
     }
 }
