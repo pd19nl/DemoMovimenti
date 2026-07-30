@@ -1,10 +1,10 @@
 namespace OutBox.Processor;
 
-public class Worker : BackgroundService
+public class WorkerOutBox : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<WorkerOutBox> _logger;
 
-    public Worker(ILogger<Worker> logger)
+    public WorkerOutBox(ILogger<WorkerOutBox> logger)
     {
         _logger = logger;
     }
