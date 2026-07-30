@@ -1,7 +1,10 @@
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Pagamento;
 using Ordini.Processor.Domains.Repositories.Dapper;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Text;
+using System.Text.Json;
 
 namespace Ordini.Processor;
 
@@ -106,9 +109,73 @@ public class Worker : BackgroundService
     //gestore dei singoli eventi
     private async Task OnEventReceived(object sender, BasicDeliverEventArgs ea)
     {
+        //indica il tipo di evento
+        string routingKey = ea.RoutingKey;
+
+        //messaggio serializzato
+        string messaggio = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+        _logger.LogInformation("Evento ricevuto con Routing Key: [{0}]", routingKey);
+
+        try
+        {
+            //creazione dello scope
+            using var scope = _serviceProvider.CreateScope();
+
+
+            //istanziare un servizio DI
+            var ordineServiceDB = scope.ServiceProvider.GetRequiredService<OrdineRepositoryReader>();
+
+            switch (routingKey)
+            {
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE:
+                    await Gestione_Ordine_Richiesto(messaggio, ordineServiceDB);
+                    break;
+
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO:
+                    // caso fine saga con successo
+
+                    await Gestione_Ordine_Completato(messaggio, ordineServiceDB);
+                    break;
+
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE:
+
+                    //  caso fallimento dalla saga da parte dell'inventario
+                    _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+                    break;
+
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO:
+                    //  caso fallimento dalla saga da parte del pagamento
+                    _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
+
+                    break;
+
+
+
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Evento nella gestione evento con Routing Key: [{0}]", routingKey);
+
+            //spostamente nella DLE Dead Letter Exchange
+            _channel?.BasicNack(ea.DeliveryTag, multiple: false, requeue: false);
+        }
+    }
+
+    private async Task Gestione_Ordine_Richiesto(string messaggio, OrdineRepositoryReader servizioDB)
+    {
+        _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
 
     }
 
+
+    private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryReader servizioDB)
+    {
+        var eventoSuccess = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
+        servizioDB.UpdateStatoOrdineAsync(eventoSuccess.IdOrdine, "Saga completata con successo");
+    }
 
 
 
