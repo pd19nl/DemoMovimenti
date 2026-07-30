@@ -7,5 +7,7 @@
         public DateTime DataCreazione { get; set; }
         public string TipologiaEvento { get; set; } = string.Empty; //nome della classe evento
         public string Payload { get; set; } = string.Empty;
+
+        public bool FlgBlackList { get; set; } = false;
     }
 }
