@@ -95,6 +95,9 @@ namespace Ordini.Processor.Domains.Repositories.Dapper
                 await sqlConnection.ExecuteAsync(insoutbox, messaggioOutBox, sqlTransaction);
                 #endregion
 
+
+                await sqlTransaction.CommitAsync();
+
                 return (nuovoOrdine.Ordine.IdOrdine, messaggioOutBox);
 
             }
