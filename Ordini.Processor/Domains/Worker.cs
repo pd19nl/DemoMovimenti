@@ -1,5 +1,6 @@
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Inventario;
+using Ordini.Contracts.Events.Ordine;
 using Ordini.Contracts.Events.Pagamento;
 using Ordini.Contracts.Models.Ordini;
 using Ordini.Processor.Domains.Repositories.Dapper;
@@ -146,9 +147,6 @@ public class Worker : BackgroundService
                 case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO:
                     await Gestione_Ordine_Pagamento_Respinto(messaggio, ordineServiceDB);
                     break;
-
-
-
             }
         }
         catch (Exception ex)
@@ -163,23 +161,30 @@ public class Worker : BackgroundService
     private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryReader servizioDB)
     {
         _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
+        OrdineRichiestoEvent eventoRichiesta = JsonSerializer.Deserialize<OrdineRichiestoEvent>(messaggio);
 
+        var (nuovoId, messaggioOutbox) = await servizioDB.CreazioneOrderOutBoxAsync(eventoRichiesta);
+
+        _logger.LogInformation("Operazione di creazione ordine completata con ID Ordine : [{0}] - Id Messaggio OutBox : [{0}]", nuovoId, messaggioOutbox.Id);
+        _logger.LogInformation("Avvio SAGA per  ID Ordine : [{0}]", nuovoId);
     }
 
 
     private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryReader servizioDB)
     {
-        var evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
+        PagamentoRiuscitoEvent evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
         _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.OK_OrdineConcluso,
                                             "Saga completata con successo");
+
+
     }
 
 
     private async Task Gestione_Ordine_Inventario_NonDisponibile(string messaggio, OrdineRepositoryReader servizioDB)
     {
-        var evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
+        InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
         //  caso fallimento dalla saga da parte dell'inventario
         _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
@@ -190,7 +195,7 @@ public class Worker : BackgroundService
 
     private async Task Gestione_Ordine_Pagamento_Respinto(string messaggio, OrdineRepositoryReader servizioDB)
     {
-        var evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
+        PagamentoFallitoEvent evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
         //  caso fallimento dalla saga da parte del pagamento
         _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
 
