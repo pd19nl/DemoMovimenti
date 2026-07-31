@@ -37,6 +37,48 @@
 
             public static class CHIAVE_EVENTO
             {
+                /// <summary>
+                /// dato un tipo evento su quale keyrouting key adottare
+                /// </summary>
+                /// <param name="eventName"></param>
+                /// <returns></returns>
+                public static string GetRoutingKeyForType(string eventName)
+                {
+                    string ritorno = "";
+                    switch (eventName)
+                    {
+                        case "OrdineCreatoEvent":
+                            ritorno = ORDINE.CREAZIONE;
+                            break;
+
+                        case "OrdineModificatoEvent":
+                            ritorno = ORDINE.MODIFICA;
+                            break;
+
+                        case "OrdineCancellazioneRichiestaEvent":
+                            ritorno = ORDINE.CANCELLAZIONE;
+                            break;
+
+                        case "InventarioNonDisponibileEvent":
+                            ritorno = INVENTARIO.NON_DISPONIBILE;
+                            break;
+
+                        case "InventarioRiservatoEvent":
+                            ritorno = INVENTARIO.ALLOCATA;
+                            break;
+
+                        case "PagamentoFallitoEvent":
+                            ritorno = PAGAMENTO.RESPINTO;
+                            break;
+
+                        case "PagamentoRiuscitoEvent":
+                            ritorno = PAGAMENTO.EFFETTUATO;
+                            break;
+                    }
+                    return ritorno;
+                }
+
+
                 public static class ORDINE
                 {
                     //"api.ordine.creazione.richiesta"
@@ -45,9 +87,11 @@
                     public const string MODIFICA = "api.ordine.modifica.richiesta";
                     public const string CANCELLAZIONE = "api.ordine.cancellazione.richiesta";
                 }
+
                 public static class INVENTARIO
                 {
                     public const string NON_DISPONIBILE = "api.inventario.creazione.nondisponibile";
+                    public const string ALLOCATA = "api.inventario.creazione.allocata";
                 }
 
                 public static class PAGAMENTO

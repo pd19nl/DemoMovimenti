@@ -50,6 +50,7 @@ builder.Logging.AddSerilog();
 // =======================================================================================
 //  aggiunta servizio di elaborazione ordini
 builder.Services.AddScoped<OutBoxRepositoryReader>();
+builder.Services.AddScoped<OutBoxRepositoryCUD>();
 
 // =======================================================================================
 //registrazione del processo in background

@@ -21,8 +21,7 @@ public class WorkerOrder : BackgroundService
 
     public WorkerOrder(ILogger<WorkerOrder> logger,
                         IServiceProvider serviceProvider,
-                        IConnection connection
-                        )
+                        IConnection connection)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
@@ -125,7 +124,7 @@ public class WorkerOrder : BackgroundService
 
 
             //istanziare un servizio DI
-            var ordineServiceDB = scope.ServiceProvider.GetRequiredService<OrdineRepositoryReader>();
+            var ordineServiceDB = scope.ServiceProvider.GetRequiredService<OrdineRepositoryCRUD>();
 
             switch (routingKey)
             {
@@ -156,7 +155,7 @@ public class WorkerOrder : BackgroundService
         }
     }
 
-    private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryReader servizioDB)
+    private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
         OrdineRichiestoEvent eventoRichiesta = JsonSerializer.Deserialize<OrdineRichiestoEvent>(messaggio);
@@ -168,7 +167,7 @@ public class WorkerOrder : BackgroundService
     }
 
 
-    private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryReader servizioDB)
+    private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         PagamentoRiuscitoEvent evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
         _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
@@ -180,7 +179,7 @@ public class WorkerOrder : BackgroundService
     }
 
 
-    private async Task Gestione_Ordine_Inventario_NonDisponibile(string messaggio, OrdineRepositoryReader servizioDB)
+    private async Task Gestione_Ordine_Inventario_NonDisponibile(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
         //  caso fallimento dalla saga da parte dell'inventario
@@ -191,7 +190,7 @@ public class WorkerOrder : BackgroundService
     }
 
 
-    private async Task Gestione_Ordine_Pagamento_Respinto(string messaggio, OrdineRepositoryReader servizioDB)
+    private async Task Gestione_Ordine_Pagamento_Respinto(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         PagamentoFallitoEvent evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
         //  caso fallimento dalla saga da parte del pagamento
