@@ -52,31 +52,31 @@ namespace Ordini.Contracts
                     switch (eventName)
                     {
                         case nameof(OrdineCreatoEvent):
-                            ritorno = ORDINE.CREATO;
+                            ritorno = ORDINE.PROCESSAMENTO_CREATO;
                             break;
 
                         case nameof(OrdineModificatoEvent):
-                            ritorno = ORDINE.MODIFICATO;
+                            ritorno = ORDINE.PROCESSAMENTO_MODIFICATO;
                             break;
 
                         case nameof(OrdineCancellatoEvent):
-                            ritorno = ORDINE.CANCELLATO;
+                            ritorno = ORDINE.PROCESSAMENTO_CANCELLATO;
                             break;
 
                         case nameof(InventarioNonDisponibileEvent):
-                            ritorno = INVENTARIO.NON_DISPONIBILE;
+                            ritorno = INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE;
                             break;
 
                         case nameof(InventarioRiservatoEvent):
-                            ritorno = INVENTARIO.ALLOCATA;
+                            ritorno = INVENTARIO.PROCESSAMENTO_ALLOCATA;
                             break;
 
                         case nameof(PagamentoFallitoEvent):
-                            ritorno = PAGAMENTO.RESPINTO;
+                            ritorno = PAGAMENTO.PROCESSAMENTO_RESPINTO;
                             break;
 
                         case nameof(PagamentoRiuscitoEvent):
-                            ritorno = PAGAMENTO.EFFETTUATO;
+                            ritorno = PAGAMENTO.PROCESSAMENTO_EFFETTUATO;
                             break;
 
                         default:
@@ -90,28 +90,27 @@ namespace Ordini.Contracts
                 public static class ORDINE
                 {
                     //"api.ordine.creazione.richiesta"
-                    public const string RICHIESTA_CREAZIONE = "api.ordine.creazione.richiesta";
+                    public const string RICHIESTA_CREAZIONE = "api.ordine.creazione";
                     //"api.ordine.modifica.richiesta"
-                    public const string RICHIESTA_MODIFICA = "api.ordine.modifica.richiesta";
-                    public const string RICHIESTA_CANCELLAZIONE = "api.ordine.cancellazione.richiesta";
+                    public const string RICHIESTA_MODIFICA = "api.ordine.modifica";
+                    public const string RICHIESTA_CANCELLAZIONE = "api.ordine.cancellazione";
 
 
-                    public const string CREATO = "ordine.creato";
-                    public const string MODIFICATO = "ordine.modificato";
-                    public const string CANCELLATO = "ordine.cancellato";
+                    public const string PROCESSAMENTO_CREATO = "ordine.creato";
+                    public const string PROCESSAMENTO_MODIFICATO = "ordine.modificato";
+                    public const string PROCESSAMENTO_CANCELLATO = "ordine.cancellato";
                 }
 
                 public static class INVENTARIO
                 {
-                    public const string NON_DISPONIBILE = "inventario.nondisponibile";
-                    public const string ALLOCATA = "inventario.allocata";
+                    public const string PROCESSAMENTO_NON_DISPONIBILE = "inventario.nondisponibile";
+                    public const string PROCESSAMENTO_ALLOCATA = "inventario.allocata";
                 }
 
                 public static class PAGAMENTO
                 {
-                    public const string RESPINTO = "pagamento.respinto";
-
-                    public const string EFFETTUATO = "pagamento.riuscito";
+                    public const string PROCESSAMENTO_RESPINTO = "pagamento.respinto";
+                    public const string PROCESSAMENTO_EFFETTUATO = "pagamento.riuscito";
                 }
 
             }

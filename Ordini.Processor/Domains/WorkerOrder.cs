@@ -56,22 +56,22 @@ public class WorkerOrder : BackgroundService
                            routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
 
         //  caso fallimento dalla saga da parte dell'inventario
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
 
         //  caso fallimento dalla saga da parte del pagamento
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
+        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
 
         // caso fine saga con successo
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
+        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
 
 
         return base.StartAsync(stoppingToken);
@@ -132,16 +132,16 @@ public class WorkerOrder : BackgroundService
                     await Gestione_Ordine_Richiesta(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO:
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO:
                     // caso fine saga con successo
                     await Gestione_Ordine_Completato(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE:
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE:
                     await Gestione_Ordine_Inventario_NonDisponibile(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO:
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO:
                     await Gestione_Ordine_Pagamento_Respinto(messaggio, ordineServiceDB);
                     break;
             }
@@ -170,7 +170,7 @@ public class WorkerOrder : BackgroundService
     private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         PagamentoRiuscitoEvent evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
-        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.EFFETTUATO);
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.OK_OrdineConcluso,
                                             "Saga completata con successo");
@@ -183,7 +183,7 @@ public class WorkerOrder : BackgroundService
     {
         InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
         //  caso fallimento dalla saga da parte dell'inventario
-        _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
+        _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.KO_ScorteNonPresenti,
                                             evento.Motivo);
@@ -194,7 +194,7 @@ public class WorkerOrder : BackgroundService
     {
         PagamentoFallitoEvent evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
         //  caso fallimento dalla saga da parte del pagamento
-        _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.RESPINTO);
+        _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
 
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.KO_PagamentoFallito,
