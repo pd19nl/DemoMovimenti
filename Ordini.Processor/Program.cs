@@ -60,4 +60,24 @@ builder.Services.AddHostedService<WorkerOrder>();
 // =======================================================================================
 //
 var host = builder.Build();
-host.Run();
+
+
+//AVVIO CON GESTIONE DELLE ECCEZIONI
+//host.Run();
+try
+{
+    Log.Information("Worker [{application}] avviato con successo",
+        Assembly.GetEntryAssembly()?.GetName().Name);
+    host.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex,
+              "Worker [{application}] terminato in modo anomalo",
+                Assembly.GetEntryAssembly()?.GetName().Name);
+}
+finally
+{
+    Log.CloseAndFlush();
+}
