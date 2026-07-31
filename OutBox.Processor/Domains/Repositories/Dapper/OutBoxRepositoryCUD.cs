@@ -41,7 +41,8 @@ public class OutBoxRepositoryCUD
 
         #region aggiornamento ordine
         string updOutBox = "update dbo.OUTBOX set " +
-                        "FLG_PROCESSATO = 1 " +
+                        "FLG_PROCESSATO = 1, " +
+                        "DATA_ELABORAZIONE = GETDATE() " +
                         "where ID =@id";
 
         _logger.LogInformation("Aggiornamento record OutBox: {0}", updOutBox);
@@ -75,6 +76,7 @@ public class OutBoxRepositoryCUD
         #region aggiornamento ordine
         string updOutBox = "update dbo.OUTBOX set " +
                         "FLG_BLACK_LIST = 1 " +
+                        "DATA_ELABORAZIONE = GETDATE() " +
                         "where ID =@id";
 
         _logger.LogInformation("Aggiornamento record OutBox: {0}", updOutBox);

@@ -101,8 +101,8 @@ public class OrdineRepositoryCRUD
                 Payload = JsonSerializer.Serialize(nuovoOrdine.Ordine)
             };
             string insoutbox = "insert into dbo.OUTBOX " +
-                                "(ID, DATA_CREAZIONE, TIPLOGIA_EVENTO, PAYLOAD) " +
-                                "values (@Id, @DataCreazione, @TipologiaEvento, @Payload);";
+                                "(ID, DATA_CREAZIONE, TIPLOGIA_EVENTO, PAYLOAD, FLG_PROCESSATO, FLG_BLACK_LIST, DATA_ELABORAZIONE) " +
+                                "values (@Id, @DataCreazione, @TipologiaEvento, @Payload,0,0,null);";
 
 
             await sqlConnection.ExecuteAsync(insoutbox, messaggioOutBox, sqlTransaction);
