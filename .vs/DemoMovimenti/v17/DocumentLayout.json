@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9DF70304-0A22-CE1E-AA12-D5904EE55694}|Elementi di soluzione{9DF70304-0A22-CE1E-AA12-D5904EE55694}|C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{9DF70304-0A22-CE1E-AA12-D5904EE55694}|Elementi di soluzione{9DF70304-0A22-CE1E-AA12-D5904EE55694}|solutionrelative:creazioneProgetto.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\inventario.processor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\inventario.processor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|solutionrelative:ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\domains\\workerinventario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\domains\\workerinventario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|solutionrelative:ordini.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,24 +30,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 4,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeDocumentMoniker": "Ordini.Processor\\Program.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeToolTip": "Ordini.Processor\\Program.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T09:52:34.324Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "WorkerInventario.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario.cs",
+              "RelativeDocumentMoniker": "Inventario.Processor\\Domains\\WorkerInventario.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario.cs",
+              "RelativeToolTip": "Inventario.Processor\\Domains\\WorkerInventario.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T09:49:45.978Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\appsettings.json",
+              "RelativeDocumentMoniker": "Inventario.Processor\\appsettings.json",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\appsettings.json",
+              "RelativeToolTip": "Inventario.Processor\\appsettings.json",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAiwE8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-31T09:49:30.31Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\appsettings.json",
+              "RelativeDocumentMoniker": "Ordini.Processor\\appsettings.json",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\appsettings.json",
+              "RelativeToolTip": "Ordini.Processor\\appsettings.json",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAE4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-07-31T09:49:19.282Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "creazioneProgetto.ps1",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1",
-              "RelativeDocumentMoniker": "creazioneProgetto.ps1",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1",
-              "RelativeToolTip": "creazioneProgetto.ps1",
-              "ViewState": "AgIAAIUAAAAAAAAAAAAAAI8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-07-30T14:22:22.121Z",
+              "Title": "Inventario.Processor",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Inventario.Processor.csproj",
+              "RelativeDocumentMoniker": "Inventario.Processor\\Inventario.Processor.csproj",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Inventario.Processor.csproj",
+              "RelativeToolTip": "Inventario.Processor\\Inventario.Processor.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-07-31T09:48:26.35Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }

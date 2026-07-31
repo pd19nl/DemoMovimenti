@@ -3,8 +3,16 @@
   "WorkspaceRootPath": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9DF70304-0A22-CE1E-AA12-D5904EE55694}|Elementi di soluzione{9DF70304-0A22-CE1E-AA12-D5904EE55694}|C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{9DF70304-0A22-CE1E-AA12-D5904EE55694}|Elementi di soluzione{9DF70304-0A22-CE1E-AA12-D5904EE55694}|solutionrelative:creazioneProgetto.ps1||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}|Ordini.Processor\\Ordini.Processor.csproj|solutionrelative:ordini.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34ED3800-A9F5-460D-AE83-DD7FC9344F45}|OutBox.Processor\\OutBox.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\outbox.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34ED3800-A9F5-460D-AE83-DD7FC9344F45}|OutBox.Processor\\OutBox.Processor.csproj|solutionrelative:outbox.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{34ED3800-A9F5-460D-AE83-DD7FC9344F45}|OutBox.Processor\\OutBox.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\outbox.processor\\domains\\workeroutbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{34ED3800-A9F5-460D-AE83-DD7FC9344F45}|OutBox.Processor\\OutBox.Processor.csproj|solutionrelative:outbox.processor\\domains\\workeroutbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,14 +31,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "creazioneProgetto.ps1",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1",
-              "RelativeDocumentMoniker": "creazioneProgetto.ps1",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\creazioneProgetto.ps1",
-              "RelativeToolTip": "creazioneProgetto.ps1",
-              "ViewState": "AgIAAIUAAAAAAAAAAAAAAI8AAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-07-30T14:22:22.121Z",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeDocumentMoniker": "Ordini.Processor\\Program.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Processor\\Program.cs",
+              "RelativeToolTip": "Ordini.Processor\\Program.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAiwFIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T09:43:59.917Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\OutBox.Processor\\Program.cs",
+              "RelativeDocumentMoniker": "OutBox.Processor\\Program.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\OutBox.Processor\\Program.cs",
+              "RelativeToolTip": "OutBox.Processor\\Program.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAiwDwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T09:39:02.485Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "WorkerOutBox.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\OutBox.Processor\\Domains\\WorkerOutBox.cs",
+              "RelativeDocumentMoniker": "OutBox.Processor\\Domains\\WorkerOutBox.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\OutBox.Processor\\Domains\\WorkerOutBox.cs",
+              "RelativeToolTip": "OutBox.Processor\\Domains\\WorkerOutBox.cs",
+              "ViewState": "AgIAABcAAAAAAAAAAAAAwAsAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-31T09:35:33.765Z",
               "EditorCaption": ""
             }
           ]

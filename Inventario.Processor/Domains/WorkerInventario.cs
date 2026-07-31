@@ -1,10 +1,10 @@
-namespace Inventario.Processor;
+namespace Inventario.Processor.Domains;
 
-public class Worker : BackgroundService
+public class WorkerInventario : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<WorkerInventario> _logger;
 
-    public Worker(ILogger<Worker> logger)
+    public WorkerInventario(ILogger<WorkerInventario> logger)
     {
         _logger = logger;
     }
