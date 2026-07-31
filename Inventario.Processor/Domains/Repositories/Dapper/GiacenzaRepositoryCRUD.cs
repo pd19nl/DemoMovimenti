@@ -24,7 +24,7 @@ public class GiacenzaRepositoryCRUD
     /// </summary>
     /// <param name="evento"></param>
     /// <returns></returns>
-    public async Task<(bool successo, string? errore)> AggiornaScorte(OrdineCreatoEvent evento)
+    public async Task<(bool successo, string? errore)> ImpegnaScorte(OrdineCreatoEvent evento)
     {
         _logger.LogInformation("Apertura connessione");
         using SqlConnection sqlConnection = new SqlConnection(_connectionString);
@@ -102,6 +102,65 @@ public class GiacenzaRepositoryCRUD
         }
     }
 
+
+    public async Task<(bool successo, string? errore)> LiberaScorte(OrdineCreatoEvent evento)
+    {
+        _logger.LogInformation("Apertura connessione");
+        using SqlConnection sqlConnection = new SqlConnection(_connectionString);
+        await sqlConnection.OpenAsync();
+
+        _logger.LogInformation("Apertura Transazione");
+        using DbTransaction sqlTransaction = await sqlConnection.BeginTransactionAsync();
+        try
+        {
+            foreach (DettaglioProdottoEvent p in evento.Prodotti)
+            {
+
+                #region ripristino qta disponibile
+                string sqlQtaUpd = "update dbo.GIACENZE set " +
+                                    "QTA_DISPONIBILE = QTA_DISPONIBILE + @qtaord " +
+                                    "where COD_ARTICOLO = @art ";
+                object[] sqlQtaUpdPar =   {
+                    new {art = p.CodiceArticolo,
+                        qtaord = p.Qta
+                    }
+                    };
+                int nrRigheAggiornate = await sqlConnection.ExecuteAsync(sqlQtaUpd, sqlQtaUpdPar, sqlTransaction);
+
+                #endregion
+
+                if (nrRigheAggiornate == 1)
+                {
+                    _logger.LogInformation("SCORTE RIALLOCAZIONE PER ORDINE: {0} - Qta: {1}",
+                                            evento.IdOrdine,
+                                            p.Qta);
+                    //NON SI COMMITTA PERCHE' DEVONO ESSERE FATTI TUTTI I PRODOTTI 
+                    //CON SUCCESSO
+                }
+                else
+                {
+                    //scela di non annullare nulla
+                    //await sqlTransaction.RollbackAsync();
+                    _logger.LogError("ERRORE DURANTE RIALLOCAZIONE RISORSE PER ORDINE: {0} - NON TROVATO RECORD", evento.IdOrdine);
+                    //return (false, "Quantità modificate prima dell'aggiornamento");
+                }
+
+            }
+
+            sqlTransaction.Commit();
+            _logger.LogInformation("SCORTE RIALLOCAZIONE PER ORDINE: {0}",
+                                    evento.IdOrdine);
+            return (true, "");
+
+        }
+        catch (Exception ex)
+        {
+            await sqlTransaction.RollbackAsync();
+            _logger.LogError("ERRORE DURANTE RIALLOCAZIONE RISORSE PER ORDINE: {0}", evento.IdOrdine);
+            await sqlTransaction.RollbackAsync();
+            return (false, ex.Message);
+        }
+    }
 
 
 }
