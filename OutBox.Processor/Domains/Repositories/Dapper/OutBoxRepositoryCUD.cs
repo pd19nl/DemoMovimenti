@@ -58,7 +58,8 @@ public class OutBoxRepositoryCUD
 
 
 
-    public async Task<bool> UpdateProcessatoError(string idOutbox)
+    public async Task<bool> UpdateProcessatoError(string idOutbox,
+                                                string errorMessage)
     {
         _logger.LogInformation("Aggiornamento record OutBox [{0}] con esito fallito",
                                 idOutbox);
@@ -76,12 +77,14 @@ public class OutBoxRepositoryCUD
         #region aggiornamento ordine
         string updOutBox = "update dbo.OUTBOX set " +
                         "FLG_BLACK_LIST = 1 " +
+                        "NOTE_ERRORE = @errore, " +
                         "DATA_ELABORAZIONE = GETDATE() " +
-                        "where ID =@id";
+                        "where ID = @id";
 
         _logger.LogInformation("Aggiornamento record OutBox: {0}", updOutBox);
 
-        object[] updOutBoxParameters = { new { id = idOutbox } };
+        object[] updOutBoxParameters = { new { id = idOutbox,
+                                                errore = errorMessage} };
 
         var nrRigheAggiornate = await sqlConnection.ExecuteAsync(updOutBox, updOutBoxParameters, sqlTransaction);
         #endregion

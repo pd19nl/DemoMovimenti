@@ -118,7 +118,8 @@ public class WorkerOutBox : BackgroundService
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex, "Errore durante la pubblicazione del messaggio OutBox [{0}]", m.Id);
+                _OutBoxDB_CUD.UpdateProcessatoError(m.Id.ToString(), ex.Message);
             }
         }
     }

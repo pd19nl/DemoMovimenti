@@ -13,5 +13,8 @@
         public bool FlgBlackList { get; set; } = false;
 
         public DateTime? DataElaborazione { get; set; }
+
+
+        public string? NoteErrore { get; set; }
     }
 }
