@@ -1,4 +1,8 @@
-﻿namespace Ordini.Contracts
+﻿using Ordini.Contracts.Events.Inventario;
+using Ordini.Contracts.Events.Ordine;
+using Ordini.Contracts.Events.Pagamento;
+
+namespace Ordini.Contracts
 {
     public static class PARAMETRI_GLOBALI
     {
@@ -47,32 +51,36 @@
                     string ritorno = "";
                     switch (eventName)
                     {
-                        case "OrdineCreatoEvent":
-                            ritorno = ORDINE.CREAZIONE;
+                        case nameof(OrdineCreatoEvent):
+                            ritorno = ORDINE.CREATO;
                             break;
 
-                        case "OrdineModificatoEvent":
-                            ritorno = ORDINE.MODIFICA;
+                        case nameof(OrdineModificatoEvent):
+                            ritorno = ORDINE.MODIFICATO;
                             break;
 
-                        case "OrdineCancellazioneRichiestaEvent":
-                            ritorno = ORDINE.CANCELLAZIONE;
+                        case nameof(OrdineCancellatoEvent):
+                            ritorno = ORDINE.CANCELLATO;
                             break;
 
-                        case "InventarioNonDisponibileEvent":
+                        case nameof(InventarioNonDisponibileEvent):
                             ritorno = INVENTARIO.NON_DISPONIBILE;
                             break;
 
-                        case "InventarioRiservatoEvent":
+                        case nameof(InventarioRiservatoEvent):
                             ritorno = INVENTARIO.ALLOCATA;
                             break;
 
-                        case "PagamentoFallitoEvent":
+                        case nameof(PagamentoFallitoEvent):
                             ritorno = PAGAMENTO.RESPINTO;
                             break;
 
-                        case "PagamentoRiuscitoEvent":
+                        case nameof(PagamentoRiuscitoEvent):
                             ritorno = PAGAMENTO.EFFETTUATO;
+                            break;
+
+                        default:
+                            ritorno = "eventi.sconosciuti";
                             break;
                     }
                     return ritorno;
@@ -82,23 +90,28 @@
                 public static class ORDINE
                 {
                     //"api.ordine.creazione.richiesta"
-                    public const string CREAZIONE = "api.ordine.creazione.richiesta";
+                    public const string RICHIESTA_CREAZIONE = "api.ordine.creazione.richiesta";
                     //"api.ordine.modifica.richiesta"
-                    public const string MODIFICA = "api.ordine.modifica.richiesta";
-                    public const string CANCELLAZIONE = "api.ordine.cancellazione.richiesta";
+                    public const string RICHIESTA_MODIFICA = "api.ordine.modifica.richiesta";
+                    public const string RICHIESTA_CANCELLAZIONE = "api.ordine.cancellazione.richiesta";
+
+
+                    public const string CREATO = "ordine.creato";
+                    public const string MODIFICATO = "ordine.modificato";
+                    public const string CANCELLATO = "ordine.cancellato";
                 }
 
                 public static class INVENTARIO
                 {
-                    public const string NON_DISPONIBILE = "api.inventario.creazione.nondisponibile";
-                    public const string ALLOCATA = "api.inventario.creazione.allocata";
+                    public const string NON_DISPONIBILE = "inventario.nondisponibile";
+                    public const string ALLOCATA = "inventario.allocata";
                 }
 
                 public static class PAGAMENTO
                 {
-                    public const string RESPINTO = "api.pagamento.respinto";
+                    public const string RESPINTO = "pagamento.respinto";
 
-                    public const string EFFETTUATO = "api.pagamento.riuscito";
+                    public const string EFFETTUATO = "pagamento.riuscito";
                 }
 
             }

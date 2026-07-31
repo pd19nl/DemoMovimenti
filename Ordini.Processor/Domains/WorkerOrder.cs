@@ -50,10 +50,10 @@ public class WorkerOrder : BackgroundService
         //sottoscrizione agli eventi
         //indicazione degli eventi ai quali si deve ricevere le notifiche
         //  caso richiesta creazione ordine
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
+        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
 
         //  caso fallimento dalla saga da parte dell'inventario
         _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.NON_DISPONIBILE);
@@ -128,7 +128,7 @@ public class WorkerOrder : BackgroundService
 
             switch (routingKey)
             {
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE:
+                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE:
                     await Gestione_Ordine_Richiesta(messaggio, ordineServiceDB);
                     break;
 
@@ -157,7 +157,7 @@ public class WorkerOrder : BackgroundService
 
     private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
-        _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE);
+        _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
         OrdineRichiestoEvent eventoRichiesta = JsonSerializer.Deserialize<OrdineRichiestoEvent>(messaggio);
 
         var (nuovoId, messaggioOutbox) = await servizioDB.CreazioneOrderOutBoxAsync(eventoRichiesta);

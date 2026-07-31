@@ -87,7 +87,7 @@ namespace Ordini.Api.Configurations.Endpoints
 
                 channel.BasicPublish(
                     exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CREAZIONE,
+                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
@@ -138,7 +138,7 @@ namespace Ordini.Api.Configurations.Endpoints
 
                 channel.BasicPublish(
                     exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.MODIFICA,
+                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_MODIFICA,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
@@ -184,7 +184,7 @@ namespace Ordini.Api.Configurations.Endpoints
 
                 channel.BasicPublish(
                     exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.CANCELLAZIONE,
+                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CANCELLAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
