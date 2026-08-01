@@ -28,46 +28,115 @@ public class WorkerInventario : BackgroundService
     {
         _channel = _rabbitConnection.CreateModel();
 
+
+        #region collegamento della coda principale alla DLX
+
+        //setup che specifica la regola per indicare dove inviare i messaggi rifiutati
+        var argumentsToDle = new Dictionary<string, object>
+        {
+            {"x-dead-letter-exchange",  PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ}
+        };
+        #endregion
+
+        DichiarazioneExchange();
+
+        DichiarazioneQueue(argumentsToDle);
+
+        AssociazioneQueueExchange(argumentsToDle);
+
+        return base.StartAsync(stoppingToken);
+    }
+
+
+    private void DichiarazioneExchange()
+    {
         _logger.LogInformation("DEFINIZIONE EXCHANGE {0}", PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini);
         //exchange degli eventi di tipo topic
         _channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                 ExchangeType.Topic,
                                 durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
 
+        //exchange Dead Letter (messaggi falliti) degli eventi di tipo topic
+        _channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+                                ExchangeType.Fanout,
+                                durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+    }
+
+    private void DichiarazioneQueue(Dictionary<string, object> argumentsToDle)
+    {
+
         //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
         _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME);
-        _channel.QueueDeclare(PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.QueueDeclare(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                               durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE,
                               exclusive: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ESCLUSIVE,
-                              autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE);
+                              autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE,
+                              arguments: argumentsToDle);
+
+
+
+        //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
+        _logger.LogInformation("DEFINIZIONE CODA DL (QUEUE) {0}", PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME);
+        _channel.QueueDeclare(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+                              durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE,
+                              exclusive: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ESCLUSIVE,
+                              autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE,
+                              arguments: null);
+    }
+
+    private void AssociazioneQueuedESottoscrizioneExchange(Dictionary<string, object> argumentsToDle)
+    {
 
         //sottoscrizione agli eventi
         //indicazione degli eventi ai quali si deve ricevere le notifiche
         //  caso richiesta creazione ordine
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO);
+        //indicazione della regola per passare alla lista dle
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO,
+                              arguments: argumentsToDle);
 
+        //indicazione della regola per passare alla lista dle
         //  caso fallimento dalla saga da parte del pagamento
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+        //indicazione della regola per passare alla lista dle
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO,
+                              arguments: argumentsToDle);
 
-        return base.StartAsync(stoppingToken);
+
+
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+                                "");
+
+        //collegamento Queue a Exchange
+        _channel.QueueBind(
+            queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+            routingKey: ""
+            );
+
     }
-
-
-
 
 
     //elaborazione dei messaggi
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-
+        //configurazione consumer asincrono
         var consumer = new AsyncEventingBasicConsumer(_channel);
-
+        //imposta il gestore dei messaggi ricevuti
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;

@@ -19,10 +19,14 @@ namespace Ordini.Contracts
             {
                 //"movimenti.saga.eventi.exchange.ordini"
                 private const string ROOT = "movimenti.saga.eventi.exchange";
+                //Dead Letter Exchange (messaggi falliti)
+                private const string ROOT_DLE = "movimenti.saga.eventi.exchange.dle";
+
                 private const string ORDINI = "ordini";
 
                 public static string NomeExchangeOrdini { get => ROOT + "." + ORDINI; }
-
+                //Dead Letter Exchange (messaggi falliti)
+                public static string NomeExchangeOrdiniDle { get => ROOT_DLE + "." + ORDINI; }
                 public static string NomeExchange { get => ROOT; }
 
             }
@@ -30,6 +34,8 @@ namespace Ordini.Contracts
             public static class PROPRIETA
             {
                 public static string ORDINI_NAME = "ordini.processor.queue";
+                //Dead Letter Queue  (messaggi falliti)
+                public static string ORDINI_NAME_DLQ = "ordini.processor.queue.dle";
 
                 public static bool AUTODELETE = false;
 
