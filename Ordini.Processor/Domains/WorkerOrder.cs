@@ -34,11 +34,39 @@ public class WorkerOrder : BackgroundService
     {
         _channel = _rabbitConnection.CreateModel();
 
+        #region collegamento della coda principale alla DLX
+
+        //setup che specifica la regola per indicare dove inviare i messaggi rifiutati
+        var argumentsToDle = new Dictionary<string, object>
+        {
+            {"x-dead-letter-exchange",  PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ}
+        };
+        #endregion
+
+        DichiarazioneExchange();
+
+        DichiarazioneQueue(argumentsToDle);
+
+        AssociazioneQueuedESottoscrizioneExchange(argumentsToDle);
+
+
+        return base.StartAsync(stoppingToken);
+    }
+
+    private void DichiarazioneExchange()
+    {
+
         _logger.LogInformation("DEFINIZIONE EXCHANGE {0}", PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini);
         //exchange degli eventi di tipo topic
         _channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                 ExchangeType.Topic,
                                 durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+
+    }
+
+    private void DichiarazioneQueue(Dictionary<string, object> argumentsToDle)
+    {
+        //nb non si associa la dle su questi eventi perchè non serve
 
         //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
         _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME);
@@ -46,37 +74,57 @@ public class WorkerOrder : BackgroundService
                               durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE,
                               exclusive: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ESCLUSIVE,
                               autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE);
+    }
+
+    private void AssociazioneQueuedESottoscrizioneExchange(Dictionary<string, object> argumentsToDle)
+    {
+        //NB non si associa la dle perchè non serve su questi eventi
+
 
         //sottoscrizione agli eventi
         //indicazione degli eventi ai quali si deve ricevere le notifiche
         //  caso richiesta creazione ordine
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                            routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE);
 
+
         //  caso fallimento dalla saga da parte dell'inventario
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                            routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE);
 
         //  caso fallimento dalla saga da parte del pagamento
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                            routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
 
         // caso fine saga con successo
-        _logger.LogInformation("SOTTOSCRIZIONE AD EVENTO {0}", PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
+        _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
+                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
+
         _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
                            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                            routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_EFFETTUATO);
 
-
-        return base.StartAsync(stoppingToken);
     }
-
 
 
     //elaborazione dei messaggi
