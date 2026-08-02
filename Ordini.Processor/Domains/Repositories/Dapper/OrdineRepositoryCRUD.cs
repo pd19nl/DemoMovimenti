@@ -16,7 +16,7 @@ public class OrdineRepositoryCRUD
 
     public OrdineRepositoryCRUD(IConfiguration configuration, ILogger<OrdineRepositoryCRUD> logger)
     {
-        _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.MAIN_R)!;
+        _connectionString = configuration.GetConnectionString(PARAMETRI.CONNESSIONE_DB.MAIN_R)!;
         _logger = logger;
     }
 

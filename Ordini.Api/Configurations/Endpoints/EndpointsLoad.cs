@@ -81,13 +81,13 @@ namespace Ordini.Api.Configurations.Endpoints
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
                 //si usa routing key descrittiva                
-                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                         ExchangeType.Topic,
-                                        durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                        durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
 
                 channel.BasicPublish(
-                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CREAZIONE,
+                    exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                    routingKey: PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CREAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
@@ -132,13 +132,13 @@ namespace Ordini.Api.Configurations.Endpoints
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
                 //si usa routing key descrittiva                
-                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                         ExchangeType.Topic,
-                                        durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                        durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
 
                 channel.BasicPublish(
-                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_MODIFICA,
+                    exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                    routingKey: PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.MODIFICA,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 
@@ -178,13 +178,13 @@ namespace Ordini.Api.Configurations.Endpoints
                 //pubblicazione su exchange degli eventi di tipo TOPIC --> 
                 //permette di avere più consumatori per lo stesso evento
                 //si usa routing key descrittiva                
-                channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                         ExchangeType.Topic,
-                                        durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                        durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
 
                 channel.BasicPublish(
-                    exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                    routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.RICHIESTA_CANCELLAZIONE,
+                    exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                    routingKey: PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CANCELLAZIONE,
                     basicProperties: null,
                     body: bodyMessaggioRabbitMQ);
 

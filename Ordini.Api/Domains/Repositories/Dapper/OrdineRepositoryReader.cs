@@ -13,7 +13,7 @@ namespace Ordini.Api.Domains.Repositories.Dapper
 
         public OrdineRepositoryReader(IConfiguration configuration, ILogger<OrdineRepositoryReader> logger)
         {
-            _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.MAIN_R)!;
+            _connectionString = configuration.GetConnectionString(PARAMETRI.CONNESSIONE_DB.MAIN_R)!;
             _logger = logger;
         }
 

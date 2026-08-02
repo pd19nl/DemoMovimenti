@@ -4,7 +4,8 @@ using Ordini.Contracts.Events.Pagamento;
 
 namespace Ordini.Contracts
 {
-    public static class PARAMETRI_GLOBALI
+    //PARAMETRI GLOBALI
+    public static class PARAMETRI
     {
         public static class CONNESSIONE_DB
         {
@@ -45,7 +46,7 @@ namespace Ordini.Contracts
 
             }
 
-            public static class CHIAVE_EVENTO
+            public static class KEY_EVENTO
             {
                 /// <summary>
                 /// dato un tipo evento su quale keyrouting key adottare
@@ -58,31 +59,31 @@ namespace Ordini.Contracts
                     switch (eventName)
                     {
                         case nameof(OrdineCreatoEvent):
-                            ritorno = ORDINE.PROCESSAMENTO_CREATO;
+                            ritorno = ORDINE.PROCESSATO.CREATO;
                             break;
 
                         case nameof(OrdineModificatoEvent):
-                            ritorno = ORDINE.PROCESSAMENTO_MODIFICATO;
+                            ritorno = ORDINE.PROCESSATO.MODIFICATO;
                             break;
 
                         case nameof(OrdineCancellatoEvent):
-                            ritorno = ORDINE.PROCESSAMENTO_CANCELLATO;
+                            ritorno = ORDINE.PROCESSATO.CANCELLATO;
                             break;
 
                         case nameof(InventarioNonDisponibileEvent):
-                            ritorno = INVENTARIO.PROCESSAMENTO_NON_DISPONIBILE;
+                            ritorno = INVENTARIO.PROCESSATO.NON_DISPONIBILE;
                             break;
 
                         case nameof(InventarioRiservatoEvent):
-                            ritorno = INVENTARIO.PROCESSAMENTO_ALLOCATA;
+                            ritorno = INVENTARIO.PROCESSATO.ALLOCATA;
                             break;
 
                         case nameof(PagamentoFallitoEvent):
-                            ritorno = PAGAMENTO.PROCESSAMENTO_RESPINTO;
+                            ritorno = PAGAMENTO.PROCESSATO.RESPINTO;
                             break;
 
                         case nameof(PagamentoRiuscitoEvent):
-                            ritorno = PAGAMENTO.PROCESSAMENTO_EFFETTUATO;
+                            ritorno = PAGAMENTO.PROCESSATO.EFFETTUATO;
                             break;
 
                         default:
@@ -95,28 +96,39 @@ namespace Ordini.Contracts
 
                 public static class ORDINE
                 {
-                    //"api.ordine.creazione.richiesta"
-                    public const string RICHIESTA_CREAZIONE = "api.ordine.creazione";
-                    //"api.ordine.modifica.richiesta"
-                    public const string RICHIESTA_MODIFICA = "api.ordine.modifica";
-                    public const string RICHIESTA_CANCELLAZIONE = "api.ordine.cancellazione";
+                    public static class RICHIESTA
+                    {
+                        //"api.ordine.creazione.richiesta"
+                        public const string CREAZIONE = "api.ordine.creazione";
+                        //"api.ordine.modifica.richiesta"
+                        public const string MODIFICA = "api.ordine.modifica";
+                        public const string CANCELLAZIONE = "api.ordine.cancellazione";
+                    }
 
-
-                    public const string PROCESSAMENTO_CREATO = "ordine.creato";
-                    public const string PROCESSAMENTO_MODIFICATO = "ordine.modificato";
-                    public const string PROCESSAMENTO_CANCELLATO = "ordine.cancellato";
+                    public static class PROCESSATO
+                    {
+                        public const string CREATO = "ordine.creato";
+                        public const string MODIFICATO = "ordine.modificato";
+                        public const string CANCELLATO = "ordine.cancellato";
+                    }
                 }
 
                 public static class INVENTARIO
                 {
-                    public const string PROCESSAMENTO_NON_DISPONIBILE = "inventario.nondisponibile";
-                    public const string PROCESSAMENTO_ALLOCATA = "inventario.allocata";
+                    public static class PROCESSATO
+                    {
+                        public const string NON_DISPONIBILE = "inventario.nondisponibile";
+                        public const string ALLOCATA = "inventario.allocata";
+                    }
                 }
 
                 public static class PAGAMENTO
                 {
-                    public const string PROCESSAMENTO_RESPINTO = "pagamento.respinto";
-                    public const string PROCESSAMENTO_EFFETTUATO = "pagamento.riuscito";
+                    public static class PROCESSATO
+                    {
+                        public const string RESPINTO = "pagamento.respinto";
+                        public const string EFFETTUATO = "pagamento.riuscito";
+                    }
                 }
 
             }

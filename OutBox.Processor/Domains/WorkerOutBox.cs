@@ -96,18 +96,21 @@ public class WorkerOutBox : BackgroundService
         //pubblicazione dei messaggi in RabbitMQ
         using var channel = _rabbitConnection.CreateModel();
 
-        channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+        //dichiarazione Exchange
+        channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                 ExchangeType.Topic,
-                                durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
 
         foreach (OutBoxMessage m in messaggiDaElaborare)
         {
             try
             {
-                string routingkey = PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.GetRoutingKeyForType(m.TipologiaEvento);
-
+                //instradamento del messaggio
+                string routingkey = PARAMETRI.QUEUE.KEY_EVENTO.GetRoutingKeyForType(m.TipologiaEvento);
+                //corpo del messaggio
                 var body = Encoding.UTF8.GetBytes(m.Payload);
-                channel.BasicPublish(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                //pubblicazione messaggio
+                channel.BasicPublish(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                     routingkey,
                                     null,
                                     body);
