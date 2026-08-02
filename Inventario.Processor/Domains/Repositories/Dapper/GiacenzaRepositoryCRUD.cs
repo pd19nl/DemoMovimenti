@@ -164,7 +164,7 @@ public class GiacenzaRepositoryCRUD
         }
         catch (Exception ex)
         {
-            await sqlTransaction.RollbackAsync();
+            //await sqlTransaction.RollbackAsync();
             _logger.LogError("ERRORE DURANTE RIALLOCAZIONE RISORSE PER ORDINE: {0}", evento.IdOrdine);
             await sqlTransaction.RollbackAsync();
             return (false, ex.Message);
