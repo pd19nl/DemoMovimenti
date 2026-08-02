@@ -228,7 +228,7 @@ public class WorkerInventario : BackgroundService
                 IdSaga = evento.IdSaga.ToString(),
                 Motivo = errore
             };
-            await PubblicazioneEvento<InventarioNonDisponibileEvent>(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE, e);
+            await PubblicazioneEvento(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE, e);
 
             _logger.LogInformation("Score non disponibili per Ordine Id {0}: Motivo [{1}]", evento.IdOrdine, errore);
 
@@ -251,14 +251,18 @@ public class WorkerInventario : BackgroundService
                 IdOrdine = evento.IdOrdine,
                 IdSaga = evento.IdSaga.ToString(),
             };
-            await PubblicazioneEvento<InventarioRipristinatoEvent>(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.RIALLOCATA, eventoCompensazione);
+            await PubblicazioneEvento(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.RIALLOCATA, eventoCompensazione);
 
         }
     }
 
-    private async Task PubblicazioneEvento<T>(string routing, T evento) where T : class
+    private async Task PubblicazioneEvento(string routing, Object evento)
     {
-
+        string messaggioBody = JsonSerializer.Serialize(evento);
+        var body = Encoding.UTF8.GetBytes(messaggioBody);
+        _channel.BasicPublish(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                routing,
+                                null, body);
     }
 
     //chiusura worker: rilascio risorse
