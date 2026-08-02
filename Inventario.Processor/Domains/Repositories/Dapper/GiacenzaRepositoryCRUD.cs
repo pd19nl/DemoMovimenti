@@ -2,6 +2,8 @@
 using Microsoft.Data.SqlClient;
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Ordine;
+using Ordini.Contracts.Events.Pagamento;
+using Ordini.Contracts.Models.Ordini;
 using System.Data.Common;
 
 namespace Inventario.Processor.Domains.Repositories.Dapper;
@@ -15,7 +17,7 @@ public class GiacenzaRepositoryCRUD
     public GiacenzaRepositoryCRUD(IConfiguration configuration,
                                 ILogger<GiacenzaRepositoryCRUD> logger)
     {
-        _connectionString = configuration.GetConnectionString(PARAMETRI_GLOBALI.CONNESSIONE_DB.MAIN_R)!;
+        _connectionString = configuration.GetConnectionString(PARAMETRI.CONNESSIONE_DB.MAIN_R)!;
         _logger = logger;
     }
 
@@ -34,6 +36,8 @@ public class GiacenzaRepositoryCRUD
         using DbTransaction sqlTransaction = await sqlConnection.BeginTransactionAsync();
         try
         {
+
+            DateTime dataOperazione = DateTime.Now;
             foreach (DettaglioProdottoEvent p in evento.Prodotti)
             {
                 #region lettura qta disponibile
@@ -83,13 +87,18 @@ public class GiacenzaRepositoryCRUD
                     return (false, "Quantità modificate prima dell'aggiornamento");
                 }
 
-
-
             }
+
+            await RegistrazioneWorkflow(sqlConnection, sqlTransaction,
+                                        evento.IdOrdine,
+                                        evento.IdSaga.ToString(),
+                                        eOrdineStato.OK_ScorteAllocate,
+                                        dataOperazione);
 
             sqlTransaction.Commit();
             _logger.LogInformation("SCORTE ALLOCAZIONE PER ORDINE: {0}",
                                     evento.IdOrdine);
+
             return (true, "");
 
         }
@@ -103,7 +112,7 @@ public class GiacenzaRepositoryCRUD
     }
 
 
-    public async Task<(bool successo, string? errore)> LiberaScorte(OrdineCreatoEvent evento)
+    public async Task<(bool successo, string? errore)> LiberaScorte(PagamentoFallitoEvent evento)
     {
         _logger.LogInformation("Apertura connessione");
         using SqlConnection sqlConnection = new SqlConnection(_connectionString);
@@ -161,6 +170,34 @@ public class GiacenzaRepositoryCRUD
             return (false, ex.Message);
         }
     }
+
+
+    private async Task RegistrazioneWorkflow(SqlConnection sqlConnection,
+                                            DbTransaction sqlTransaction,
+                                            string idOrdine,
+                                            string idSaga,
+                                            eOrdineStato stato,
+                                            DateTime dataOperazione)
+    {
+
+        //Registrazione Workflow ordine
+        #region registrazione workflow ordine
+        string workfloword = "insert into dbo.ORDINI_WORKFLOW " +
+                            "(ID_ORDINE, DATA_OPERAZIONE, ID_STATO, ID_SAGA) " +
+                            "values (@id, @data, @stato, @idsaga)";
+
+        _logger.LogInformation("Registrazione workflow ordine: {0}", workfloword);
+
+        object[] wfordparameters = { new {   id = idOrdine,
+                                                 data = dataOperazione,
+                                                 stato = (short)stato,
+                                                 idsaga = idSaga
+                                         } };
+
+        await sqlConnection.ExecuteAsync(workfloword, wfordparameters, sqlTransaction);
+        #endregion
+    }
+
 
 
 }

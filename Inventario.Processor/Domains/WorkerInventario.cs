@@ -1,8 +1,12 @@
 using Inventario.Processor.Domains.Repositories.Dapper;
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Inventario;
+using Ordini.Contracts.Events.Ordine;
+using Ordini.Contracts.Events.Pagamento;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace Inventario.Processor.Domains;
 
@@ -34,7 +38,7 @@ public class WorkerInventario : BackgroundService
         //setup che specifica la regola per indicare dove inviare i messaggi rifiutati
         var argumentsToDle = new Dictionary<string, object>
         {
-            {"x-dead-letter-exchange",  PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ}
+            {"x-dead-letter-exchange",  PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ}
         };
         #endregion
 
@@ -42,7 +46,7 @@ public class WorkerInventario : BackgroundService
 
         DichiarazioneQueue(argumentsToDle);
 
-        AssociazioneQueueExchange(argumentsToDle);
+        AssociazioneQueuedESottoscrizioneExchange(argumentsToDle);
 
         return base.StartAsync(stoppingToken);
     }
@@ -50,37 +54,37 @@ public class WorkerInventario : BackgroundService
 
     private void DichiarazioneExchange()
     {
-        _logger.LogInformation("DEFINIZIONE EXCHANGE {0}", PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini);
+        _logger.LogInformation("DEFINIZIONE EXCHANGE {0}", PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini);
         //exchange degli eventi di tipo topic
-        _channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+        _channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
                                 ExchangeType.Topic,
-                                durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
 
         //exchange Dead Letter (messaggi falliti) degli eventi di tipo topic
-        _channel.ExchangeDeclare(PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+        _channel.ExchangeDeclare(PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
                                 ExchangeType.Fanout,
-                                durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE);
+                                durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE);
     }
 
     private void DichiarazioneQueue(Dictionary<string, object> argumentsToDle)
     {
 
         //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
-        _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME);
-        _channel.QueueDeclare(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
-                              durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE,
-                              exclusive: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ESCLUSIVE,
-                              autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE,
+        _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME);
+        _channel.QueueDeclare(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                              durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE,
+                              exclusive: PARAMETRI.QUEUE.PROPRIETA.ESCLUSIVE,
+                              autoDelete: PARAMETRI.QUEUE.PROPRIETA.AUTODELETE,
                               arguments: argumentsToDle);
 
 
 
         //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
-        _logger.LogInformation("DEFINIZIONE CODA DL (QUEUE) {0}", PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME);
-        _channel.QueueDeclare(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
-                              durable: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.DURABLE,
-                              exclusive: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ESCLUSIVE,
-                              autoDelete: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.AUTODELETE,
+        _logger.LogInformation("DEFINIZIONE CODA DL (QUEUE) {0}", PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME);
+        _channel.QueueDeclare(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+                              durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE,
+                              exclusive: PARAMETRI.QUEUE.PROPRIETA.ESCLUSIVE,
+                              autoDelete: PARAMETRI.QUEUE.PROPRIETA.AUTODELETE,
                               arguments: null);
     }
 
@@ -92,39 +96,39 @@ public class WorkerInventario : BackgroundService
         //  caso richiesta creazione ordine
         //indicazione della regola per passare alla lista dle
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
-                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO);
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.PROCESSATO.CREATO);
 
-        _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
-                           exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO,
-                              arguments: argumentsToDle);
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                           exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.PROCESSATO.CREATO,
+                           arguments: argumentsToDle);
 
         //indicazione della regola per passare alla lista dle
         //  caso fallimento dalla saga da parte del pagamento
         //indicazione della regola per passare alla lista dle
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
-                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO);
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                                PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
 
-        _channel.QueueBind(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
-                           exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO,
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                           exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
+                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO,
                               arguments: argumentsToDle);
 
 
 
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
-                                PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+                                PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
                                 "");
 
         //collegamento Queue a Exchange
         _channel.QueueBind(
-            queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
-            exchange: PARAMETRI_GLOBALI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
+            queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ,
+            exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdiniDle,
             routingKey: ""
             );
 
@@ -140,7 +144,7 @@ public class WorkerInventario : BackgroundService
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;
-        _channel.BasicConsume(queue: PARAMETRI_GLOBALI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.BasicConsume(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
                             autoAck: false,
                             consumer: consumer);
 
@@ -174,18 +178,17 @@ public class WorkerInventario : BackgroundService
             //creazione dello scope
             using var scope = _serviceProvider.CreateScope();
 
-
             //istanziare un servizio DI
-            var ordineServiceDB = scope.ServiceProvider.GetRequiredService<GiacenzaRepositoryCRUD>();
+            var giacenzaRepositoryDB = scope.ServiceProvider.GetRequiredService<GiacenzaRepositoryCRUD>();
 
             switch (routingKey)
             {
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.ORDINE.PROCESSAMENTO_CREATO:
-                    await Gestione_Giacenza_Richiesta(messaggio, ordineServiceDB);
+                case PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.PROCESSATO.CREATO:
+                    await Gestione_Giacenza_Richiesta(messaggio, giacenzaRepositoryDB);
                     break;
 
-                case PARAMETRI_GLOBALI.QUEUE.CHIAVE_EVENTO.PAGAMENTO.PROCESSAMENTO_RESPINTO:
-                    await Gestione_Giacenza_Ripristina(messaggio, ordineServiceDB);
+                case PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO:
+                    await Gestione_Giacenza_Ripristina(messaggio, giacenzaRepositoryDB);
                     break;
             }
         }
@@ -198,6 +201,63 @@ public class WorkerInventario : BackgroundService
         }
     }
 
+    //da ordine creato si attiva la procedura di assegnazione giacenza
+    private async Task Gestione_Giacenza_Richiesta(string messaggio, GiacenzaRepositoryCRUD servizioDB)
+    {
+        OrdineCreatoEvent evento = JsonSerializer.Deserialize<OrdineCreatoEvent>(messaggio);
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
+        //evento.IdOrdine, evento.IdSaga,
+        (bool esito, string? errore) = await servizioDB.ImpegnaScorte(evento);
+
+        if (esito)
+        {
+            InventarioRiservatoEvent e = new InventarioRiservatoEvent
+            {
+                Ordine = evento
+            };
+            PubblicazioneEvento(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.ALLOCATA, e);
+
+            _logger.LogInformation("Score riservato con successo per Ordine Id {0}", evento.IdOrdine);
+
+        }
+        else
+        {
+            InventarioNonDisponibileEvent e = new InventarioNonDisponibileEvent
+            {
+                IdOrdine = evento.IdOrdine,
+                IdSaga = evento.IdSaga.ToString(),
+                Motivo = errore
+            };
+            PubblicazioneEvento(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE, e);
+
+            _logger.LogInformation("Score non disponibili per Ordine Id {0}: Motivo [{1}]", evento.IdOrdine, errore);
+
+        }
+
+    }
+
+    // a fronte di un fallito pagamento o di cancellazione ordine:
+    private async Task Gestione_Giacenza_Ripristina(string messaggio, GiacenzaRepositoryCRUD servizioDB)
+    {
+        PagamentoFallitoEvent evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
+        _logger.LogInformation("Ricevuto PagamentoFallitoEvent per ordine {0}. Avvio azione compensativa",
+                               evento.IdOrdine);
+        (bool esito, string? errore) = await servizioDB.LiberaScorte(evento);
 
 
+    }
+
+    private async Task PubblicazioneEvento<T>(string routing, T evento) where T : class
+    {
+
+    }
+
+    //chiusura worker: rilascio risorse
+    public override void Dispose()
+    {
+        _channel?.Close();
+        _channel?.Dispose();
+
+        base.Dispose();
+    }
 }
