@@ -17,6 +17,6 @@ namespace Ordini.Contracts.Events.Pagamento
         public string Motivo { get; set; }
 
         //per facilitare le azioni di rollback
-        public List<DettaglioProdottoEvent> Dettagli { get; set; } = new List<DettaglioProdottoEvent>();
+        public List<DettaglioProdottoEvent> Prodotti { get; set; } = new List<DettaglioProdottoEvent>();
     }
 }

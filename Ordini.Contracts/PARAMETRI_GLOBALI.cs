@@ -119,6 +119,7 @@ namespace Ordini.Contracts
                     {
                         public const string NON_DISPONIBILE = "inventario.nondisponibile";
                         public const string ALLOCATA = "inventario.allocata";
+                        public const string RIALLOCATA = "inventario.allocata";
                     }
                 }
 

@@ -228,7 +228,7 @@ public class WorkerInventario : BackgroundService
                 IdSaga = evento.IdSaga.ToString(),
                 Motivo = errore
             };
-            PubblicazioneEvento(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE, e);
+            await PubblicazioneEvento<InventarioNonDisponibileEvent>(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE, e);
 
             _logger.LogInformation("Score non disponibili per Ordine Id {0}: Motivo [{1}]", evento.IdOrdine, errore);
 
@@ -244,7 +244,16 @@ public class WorkerInventario : BackgroundService
                                evento.IdOrdine);
         (bool esito, string? errore) = await servizioDB.LiberaScorte(evento);
 
+        if (esito)
+        {
+            InventarioRipristinatoEvent eventoCompensazione = new InventarioRipristinatoEvent
+            {
+                IdOrdine = evento.IdOrdine,
+                IdSaga = evento.IdSaga.ToString(),
+            };
+            await PubblicazioneEvento<InventarioRipristinatoEvent>(PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.RIALLOCATA, eventoCompensazione);
 
+        }
     }
 
     private async Task PubblicazioneEvento<T>(string routing, T evento) where T : class
