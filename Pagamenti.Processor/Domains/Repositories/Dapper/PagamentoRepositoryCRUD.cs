@@ -3,7 +3,6 @@ using Microsoft.Data.SqlClient;
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Inventario;
 using Ordini.Contracts.Models.Ordini;
-using System.Data.Common;
 
 namespace Pagamenti.Processor.Domains.Repositories.Dapper;
 
@@ -21,17 +20,16 @@ public class PagamentoRepositoryCRUD
     }
 
 
-    public async Task<(bool esito, string? motivo)> SalvaTransazione(InventarioRiservatoEvent evento, eOrdineStato stato)
+    public async Task<(bool esito, string? motivo)> SalvaTransazione(InventarioRiservatoEvent evento,
+                                                                        eOrdineStato stato,
+                                                                        DateTime dataOperazione)
     {
 
         _logger.LogInformation("Apertura connessione");
         using SqlConnection sqlConnection = new SqlConnection(_connectionString);
         await sqlConnection.OpenAsync();
 
-        _logger.LogInformation("Apertura Transazione");
-        using DbTransaction sqlTransaction = await sqlConnection.BeginTransactionAsync();
 
-        DateTime OperationDate = DateTime.Now;
         try
         {
             //1) creazione ordine
@@ -45,14 +43,12 @@ public class PagamentoRepositoryCRUD
             object[] inspagparameters = { new {   idord = evento.Ordine.IdOrdine,
                                                     idcliente = evento.Ordine.IdCliente,
                                                     stato = (short)stato,
-                                                    data = OperationDate,
+                                                    data = dataOperazione,
                                                   importo=  evento.Ordine.ImportoTotale
                                             } };
 
-            await sqlConnection.ExecuteAsync(inspag, inspagparameters, sqlTransaction);
-            #endregion
-
-            await sqlTransaction.CommitAsync();
+            await sqlConnection.ExecuteAsync(inspag, inspagparameters);
+            #endregion            
 
             return (true, null);
 
@@ -60,9 +56,9 @@ public class PagamentoRepositoryCRUD
         catch (Exception ex)
         {
             _logger.LogError("ERRORE DURANTE INSERIMENTO PAGAMENTO : {0}", ex.Message);
-            await sqlTransaction.RollbackAsync();
+            return (false, ex.Message);
         }
-        return (true, null);
+
     }
 
 

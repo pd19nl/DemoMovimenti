@@ -24,15 +24,22 @@ namespace Pagamenti.Processor.Domains.Services
         /// <returns></returns>
         public async Task<(bool successo, string? errore)> EffettuaPagamento(InventarioRiservatoEvent evento)
         {
+
+            DateTime OperationDate = DateTime.Now;
+
             //if (evento.Ordine.IdCliente.Equals("fallire", StringComparison.OrdinalIgnoreCase))
             if (evento.Ordine.IdCliente == 3)
             {
                 _logger.LogWarning("Pagamento Fallito");
-                await _repositoryCRUD.SalvaTransazione(evento, eOrdineStato.KO_PagamentoFallito);
+                await _repositoryCRUD.SalvaTransazione(evento,
+                                                        eOrdineStato.KO_PagamentoFallito,
+                                                        OperationDate);
                 return (false, "Pagamento Fallito");
             }
             _logger.LogWarning("Pagamento Effettuato");
-            await _repositoryCRUD.SalvaTransazione(evento, eOrdineStato.OK_PagamentoEseguito);
+            await _repositoryCRUD.SalvaTransazione(evento,
+                                                    eOrdineStato.OK_PagamentoEseguito,
+                                                    OperationDate);
             return (true, null);
         }
 
