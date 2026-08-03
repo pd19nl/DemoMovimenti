@@ -10,7 +10,7 @@
 
         public string IdOrdine { get; set; } = string.Empty;
 
-        public string IdCliente { get; set; } = string.Empty;
+        public int IdCliente { get; set; } = 0;
 
         //public decimal ImportoTotale { get; set; }
 

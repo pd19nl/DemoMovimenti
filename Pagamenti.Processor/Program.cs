@@ -1,5 +1,6 @@
 using Pagamenti.Processor.Domains;
 using Pagamenti.Processor.Domains.Repositories.Dapper;
+using Pagamenti.Processor.Domains.Services;
 using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
@@ -50,6 +51,8 @@ builder.Logging.AddSerilog();
 // =======================================================================================
 //  aggiunta servizio di elaborazione ordini
 builder.Services.AddScoped<PagamentoRepositoryCRUD>();
+
+builder.Services.AddScoped<PagamentoService>();
 
 // =======================================================================================
 //registrazione del processo in background

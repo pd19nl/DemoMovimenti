@@ -7,7 +7,7 @@
 
         public DateTime Data { get; set; }
 
-        public string IdCliente { get; set; }
+        public int IdCliente { get; set; }
 
         //public string? NumProg { get; set; }
 

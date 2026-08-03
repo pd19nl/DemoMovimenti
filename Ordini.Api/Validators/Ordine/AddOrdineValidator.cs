@@ -7,10 +7,12 @@ namespace Ordini.Api.Validators.Ordine
     {
         public AddOrdineValidator()
         {
+            //RuleFor(o => o.IdCliente)
+            //    .NotEmpty().WithMessage("Il Codice Cliente è obbligatorio")
+            //    .MaximumLength(10).WithMessage("Lunghezza Massima Codice Cliente 10");
             RuleFor(o => o.IdCliente)
-                .NotEmpty().WithMessage("Il Codice Cliente è obbligatorio")
-                .MaximumLength(10).WithMessage("Lunghezza Massima Codice Cliente 10");
-
+                .GreaterThan(0)
+                .WithMessage("Indicare un codice cliente valido");
 
             RuleFor(o => o.Data)
                 .LessThanOrEqualTo(DateTime.Now).WithMessage("La data non può essere futura");
