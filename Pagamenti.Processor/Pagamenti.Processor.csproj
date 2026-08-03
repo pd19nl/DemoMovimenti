@@ -33,8 +33,5 @@
 			<HintPath>..\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.dll</HintPath>
 		</Reference>
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Domains\Repositories\Dapper\" />
-	</ItemGroup>
 	
 </Project>
