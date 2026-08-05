@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
@@ -30,8 +30,12 @@
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.2" />
 	</ItemGroup>
 	<ItemGroup>
+		<Reference Include="Ordini.ApplicationAPI.Models">
+		  <HintPath>..\Ordini.ApplicationAPI.Models\bin\Debug\net9.0\Ordini.ApplicationAPI.Models.dll</HintPath>
+		</Reference>
 		<Reference Include="Ordini.Contracts">
 			<HintPath>..\Ordini.Contracts\bin\Debug\net9.0\Ordini.Contracts.dll</HintPath>
 		</Reference>
 	</ItemGroup>
+	
 </Project>

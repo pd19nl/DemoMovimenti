@@ -5,7 +5,8 @@ public enum eOrdineStatus
     NonProcessato = 0,
     NonAccettato = 1,
     Success = 2,
-    Fallito = 3
+    Fallito = 3,
+    InElaborazione
 }
 public class SignalRMessageDTO
 {

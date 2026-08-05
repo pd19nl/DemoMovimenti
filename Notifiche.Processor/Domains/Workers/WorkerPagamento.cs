@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Notifiche;
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Pagamento;
 using RabbitMQ.Client;
@@ -251,7 +252,7 @@ public class WorkerPagamento : BackgroundService
             _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
         }
 
-        string status = "FALLITO";
+        eOrdineStatus status = eOrdineStatus.Fallito;
         string motivo = $"Il pagamento è fallito: {evento.Motivo}";
         string ordineId = evento.IdOrdine;
 
@@ -259,8 +260,20 @@ public class WorkerPagamento : BackgroundService
 
     }
 
-    private void InviaNotifica(string stati, string motivo, string idOrdine)
+    private async Task InviaNotifica(eOrdineStatus stato, string motivo, string idOrdine)
     {
+        try
+        {
+            await _hubConnection.InvokeAsync("SendNotiticationToGroup",
+                                                idOrdine,
+                                                stato,
+                                                motivo);
+            _logger.LogInformation($"Notifica per IdOrdine {idOrdine} inviata all'HUB");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Errore durante l'invio della notifica all'Hub SignalR");
+        }
     }
 
 

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR.Client;
+using Ordini.ApplicationAPI.Models.DTOs.Ordine.Notifiche;
 using Ordini.Contracts;
 using Ordini.Contracts.Events.Inventario;
 using RabbitMQ.Client;
@@ -224,7 +225,7 @@ public class WorkerInventario : BackgroundService
             _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
         }
 
-        string status = "IN ELABORAZIONE";
+        eOrdineStatus status = eOrdineStatus.InElaborazione;
         string motivo = $"Merce allocata";
         string ordineId = evento.IdOrdine;
 
@@ -247,7 +248,7 @@ public class WorkerInventario : BackgroundService
             _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
         }
 
-        string status = "FALLITO";
+        eOrdineStatus status = eOrdineStatus.NonAccettato;
         string motivo = $"Disponibilità merce non presente: {evento.Motivo}";
         string ordineId = evento.IdOrdine;
 
@@ -255,7 +256,19 @@ public class WorkerInventario : BackgroundService
 
     }
 
-    private void InviaNotifica(string stati, string motivo, string idOrdine)
+    private async Task InviaNotifica(eOrdineStatus stato, string motivo, string idOrdine)
     {
+        try
+        {
+            await _hubConnection.InvokeAsync("SendNotiticationToGroup",
+                                                idOrdine,
+                                                stato,
+                                                motivo);
+            _logger.LogInformation($"Notifica per IdOrdine {idOrdine} inviata all'HUB");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Errore durante l'invio della notifica all'Hub SignalR");
+        }
     }
 }

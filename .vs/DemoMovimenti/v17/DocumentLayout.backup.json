@@ -3,32 +3,24 @@
   "WorkspaceRootPath": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\domains\\workers\\workerpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\domains\\workers\\workerpagamento.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{603F7A63-6731-4138-A867-392121FACFCB}|Ordini.Api\\Ordini.Api.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\ordini.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{603F7A63-6731-4138-A867-392121FACFCB}|Ordini.Api\\Ordini.Api.csproj|solutionrelative:ordini.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\domains\\workers\\workerordine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\domains\\workers\\workerordine.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\domains\\workers\\workerinventario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\domains\\workers\\workerinventario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\domains\\workerinventario_pagamentorespinto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\domains\\workerinventario_pagamentorespinto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\notifiche.processor\\notifiche.processor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}|Notifiche.Processor\\Notifiche.Processor.csproj|solutionrelative:notifiche.processor\\notifiche.processor.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{361F8D64-1127-48F0-A83E-07CD04A3D311}|Pagamenti.Processor\\Pagamenti.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\pagamenti.processor\\domains\\workerpagamenti_inventarioallocato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{361F8D64-1127-48F0-A83E-07CD04A3D311}|Pagamenti.Processor\\Pagamenti.Processor.csproj|solutionrelative:pagamenti.processor\\domains\\workerpagamenti_inventarioallocato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|c:\\dossi\\studio\\vs\\kafka_ddd_saga\\demomovimenti\\inventario.processor\\domains\\workerinventario_ordinecreato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E10BDA62-CFCE-49A9-A0E3-EA6030A6F421}|Inventario.Processor\\Inventario.Processor.csproj|solutionrelative:inventario.processor\\domains\\workerinventario_ordinecreato.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,84 +30,58 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Api\\appsettings.json",
-              "RelativeDocumentMoniker": "Ordini.Api\\appsettings.json",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Ordini.Api\\appsettings.json",
-              "RelativeToolTip": "Ordini.Api\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-05T12:11:01.181Z",
+              "DocumentIndex": 0,
+              "Title": "WorkerPagamento.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerPagamento.cs",
+              "RelativeDocumentMoniker": "Notifiche.Processor\\Domains\\Workers\\WorkerPagamento.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerPagamento.cs",
+              "RelativeToolTip": "Notifiche.Processor\\Domains\\Workers\\WorkerPagamento.cs",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAwwJkAAABcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-05T15:24:48.497Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Program.cs",
-              "RelativeDocumentMoniker": "Notifiche.Processor\\Program.cs",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Program.cs",
-              "RelativeToolTip": "Notifiche.Processor\\Program.cs",
-              "ViewState": "AgIAACYAAAAAAAAAAAAmwDUAAAAqAAAAAAAAAA==",
+              "Title": "WorkerInventario.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerInventario.cs",
+              "RelativeDocumentMoniker": "Notifiche.Processor\\Domains\\Workers\\WorkerInventario.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerInventario.cs",
+              "RelativeToolTip": "Notifiche.Processor\\Domains\\Workers\\WorkerInventario.cs",
+              "ViewState": "AgIAAI4AAAAAAAAAAAAwwJkAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-05T12:07:59.514Z",
+              "WhenOpened": "2026-08-05T15:24:36.112Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Program.cs",
-              "RelativeDocumentMoniker": "Inventario.Processor\\Program.cs",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Program.cs",
-              "RelativeToolTip": "Inventario.Processor\\Program.cs",
-              "ViewState": "AgIAACoAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "Title": "WorkerInventario_PagamentoRespinto.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario_PagamentoRespinto.cs",
+              "RelativeDocumentMoniker": "Inventario.Processor\\Domains\\WorkerInventario_PagamentoRespinto.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario_PagamentoRespinto.cs",
+              "RelativeToolTip": "Inventario.Processor\\Domains\\WorkerInventario_PagamentoRespinto.cs",
+              "ViewState": "AgIAAM4AAAAAAAAAAAAwwNkAAABcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-05T10:33:28.081Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\appsettings.json",
-              "RelativeDocumentMoniker": "Notifiche.Processor\\appsettings.json",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\appsettings.json",
-              "RelativeToolTip": "Notifiche.Processor\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-05T10:30:32.186Z",
+              "WhenOpened": "2026-08-05T15:24:30.946Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\appsettings.json",
-              "RelativeDocumentMoniker": "Inventario.Processor\\appsettings.json",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\appsettings.json",
-              "RelativeToolTip": "Inventario.Processor\\appsettings.json",
-              "ViewState": "AgIAACQAAAAAAAAAAAAAAE4AAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-08-05T10:30:12.246Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Notifiche.Processor",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Notifiche.Processor.csproj",
-              "RelativeDocumentMoniker": "Notifiche.Processor\\Notifiche.Processor.csproj",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Notifiche.Processor.csproj",
-              "RelativeToolTip": "Notifiche.Processor\\Notifiche.Processor.csproj",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAqwBIAAAA5AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-08-05T10:29:56.128Z",
+              "Title": "WorkerInventario_OrdineCreato.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario_OrdineCreato.cs",
+              "RelativeDocumentMoniker": "Inventario.Processor\\Domains\\WorkerInventario_OrdineCreato.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Inventario.Processor\\Domains\\WorkerInventario_OrdineCreato.cs",
+              "RelativeToolTip": "Inventario.Processor\\Domains\\WorkerInventario_OrdineCreato.cs",
+              "ViewState": "AgIAANcAAAAAAAAAAAAwwN8AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-08-05T15:24:24.262Z",
               "EditorCaption": ""
             },
             {
@@ -124,15 +90,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "WorkerPagamenti_InventarioAllocato.cs",
-              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Pagamenti.Processor\\Domains\\WorkerPagamenti_InventarioAllocato.cs",
-              "RelativeDocumentMoniker": "Pagamenti.Processor\\Domains\\WorkerPagamenti_InventarioAllocato.cs",
-              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Pagamenti.Processor\\Domains\\WorkerPagamenti_InventarioAllocato.cs",
-              "RelativeToolTip": "Pagamenti.Processor\\Domains\\WorkerPagamenti_InventarioAllocato.cs",
-              "ViewState": "AgIAAA4BAAAAAAAAAAAWwBcBAAAiAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "WorkerOrdine.cs",
+              "DocumentMoniker": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerOrdine.cs",
+              "RelativeDocumentMoniker": "Notifiche.Processor\\Domains\\Workers\\WorkerOrdine.cs",
+              "ToolTip": "C:\\Dossi\\Studio\\VS\\kafka_DDD_Saga\\DemoMovimenti\\Notifiche.Processor\\Domains\\Workers\\WorkerOrdine.cs",
+              "RelativeToolTip": "Notifiche.Processor\\Domains\\Workers\\WorkerOrdine.cs",
+              "ViewState": "AgIAAIkAAAAAAAAAAAAwwJMAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-08-05T10:26:31.675Z",
+              "WhenOpened": "2026-08-05T15:23:51.328Z",
               "EditorCaption": ""
             }
           ]
