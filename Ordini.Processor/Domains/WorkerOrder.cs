@@ -130,6 +130,13 @@ public class WorkerOrder : BackgroundService
     //elaborazione dei messaggi
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        //ci si assicura che il canale sia pronto
+        if (_channel == null)
+        {
+            _logger.LogError("Canale RabbitMQ non inizializzato. il Worker Ordine (Ordine) non può avviarsi.");
+            return;
+        }
+
 
         var consumer = new AsyncEventingBasicConsumer(_channel);
 

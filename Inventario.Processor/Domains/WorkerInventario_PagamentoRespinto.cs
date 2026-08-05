@@ -200,6 +200,13 @@ public class WorkerInventario_PagamentoRespinto : BackgroundService
     //elaborazione dei messaggi
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        //ci si assicura che il canale sia pronto
+        if (_channel == null)
+        {
+            _logger.LogError("Canale RabbitMQ non inizializzato. il Worker Pagamento (Inventario) non può avviarsi.");
+            return;
+        }
+
         //configurazione consumer asincrono
         var consumer = new AsyncEventingBasicConsumer(_channel);
         //imposta il gestore dei messaggi ricevuti

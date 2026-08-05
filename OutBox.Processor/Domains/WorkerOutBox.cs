@@ -60,6 +60,13 @@ public class WorkerOutBox : BackgroundService
     /// <returns></returns>
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        //ci si assicura che il canale sia pronto
+        if (_channel == null)
+        {
+            _logger.LogError("Canale RabbitMQ non inizializzato. il Worker OutBox (OutBox) non può avviarsi.");
+            return;
+        }
+
         //timer periodico
         using var timer = new PeriodicTimer(_periodoCiclo);
 
