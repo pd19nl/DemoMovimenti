@@ -4,6 +4,11 @@ using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
 
+//serve ad inviare le notifiche al front-end
+
+
+
+
 
 var builder = Host.CreateApplicationBuilder(args);
 

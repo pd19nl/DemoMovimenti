@@ -1,10 +1,10 @@
 namespace Notifiche.Processor;
 
-public class Worker : BackgroundService
+public class WorkerOrdine : BackgroundService
 {
-    private readonly ILogger<Worker> _logger;
+    private readonly ILogger<WorkerOrdine> _logger;
 
-    public Worker(ILogger<Worker> logger)
+    public WorkerOrdine(ILogger<WorkerOrdine> logger)
     {
         _logger = logger;
     }
