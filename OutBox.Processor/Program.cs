@@ -40,7 +40,7 @@ builder.Services.AddScoped(r =>
 
 // =======================================================================================
 // configurazione Serilog
-var appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "Ordini.Worker";
+var appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "Outbox.Worker";
 builder.Logging.ClearProviders();
 
 //lettura appsettings
