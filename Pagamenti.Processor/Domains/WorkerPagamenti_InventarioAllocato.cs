@@ -1,5 +1,11 @@
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Inventario;
+using Ordini.Contracts.Events.Pagamento;
+using Pagamenti.Processor.Domains.Services;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Text;
+using System.Text.Json;
 
 namespace Pagamenti.Processor.Domains;
 
@@ -27,8 +33,8 @@ public class WorkerPagamenti_InventarioAllocato : BackgroundService
     Dictionary<string, object> argumentsToDle_Inventario = null;
 
     public WorkerPagamenti_InventarioAllocato(ILogger<WorkerPagamenti_InventarioAllocato> logger,
-                        IServiceProvider serviceProvider,
-                        IConnection connection)
+                                            IServiceProvider serviceProvider,
+                                            IConnection connection)
     {
         _logger = logger;
         _serviceProvider = serviceProvider;
@@ -184,13 +190,122 @@ public class WorkerPagamenti_InventarioAllocato : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+
+        //configurazione consumer asincrono
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        //imposta il gestore dei messaggi ricevuti
+        consumer.Received += OnEventReceived;
+
+        //Avvio consumo dei messaggi in coda;
+        _channel.BasicConsume(queue: _Queue_Read_Inventario,
+                            autoAck: false,
+                            consumer: consumer);
+
+        //mantenimento del servizio in esecuzione
+        await Task.Delay(Timeout.Infinite, stoppingToken);
+
+        //while (!stoppingToken.IsCancellationRequested)
+        //{
+        //    if (_logger.IsEnabled(LogLevel.Information))
+        //    {
+        //        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+        //    }
+        //    await Task.Delay(1000, stoppingToken);
+        //}
+    }
+
+
+    //gestore dei singoli eventi
+    private async Task OnEventReceived(object sender, BasicDeliverEventArgs ea)
+    {
+        //indica il tipo di evento
+        string routingKey = ea.RoutingKey;
+
+        //messaggio serializzato
+        string messaggio = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+        _logger.LogInformation("Evento ricevuto con Routing Key: [{0}]", routingKey);
+
+        try
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            //creazione dello scope
+            using var scope = _serviceProvider.CreateScope();
+
+            //istanziare un servizio DI
+            var pagamentoService = scope.ServiceProvider.GetRequiredService<PagamentoService>();
+
+            switch (routingKey)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.PROCESSATO.CREATO:
+                    await Gestione_Pagamento_Effettua(messaggio, pagamentoService);
+                    break;
+
+                    //case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO:
+                    //    await Gestione_Giacenza_Ripristina(messaggio, giacenzaRepositoryDB);
+                    //    break;
             }
-            await Task.Delay(1000, stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Evento nella gestione evento con Routing Key: [{0}]", routingKey);
+
+            //spostamente nella DLE Dead Letter Exchange
+            _channel?.BasicNack(ea.DeliveryTag, multiple: false, requeue: false);
         }
     }
+
+
+    //da ordine creato si attiva la procedura di assegnazione giacenza
+    private async Task Gestione_Pagamento_Effettua(string messaggio, PagamentoService servizioPagamento)
+    {
+        InventarioRiservatoEvent evento = JsonSerializer.Deserialize<InventarioRiservatoEvent>(messaggio);
+        if (evento == null)
+        {
+            throw new JsonException("Impossibile deserializzare InventarioRiservatoEvent");
+        }
+
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
+        //evento.IdOrdine, evento.IdSaga,
+        (bool esito, string? errore) = await servizioPagamento.EffettuaPagamento(evento);
+
+        if (esito)
+        {
+            PagamentoRiuscitoEvent e = new PagamentoRiuscitoEvent
+            {
+                IdOrdine = evento.Ordine.IdOrdine,
+                IdSaga = evento.Ordine.IdSaga.ToString()
+            };
+            PubblicazioneEvento(PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO, e);
+
+            _logger.LogInformation("Score riservato con successo per Ordine Id {0}", evento.Ordine.IdOrdine);
+
+        }
+        else
+        {
+            PagamentoFallitoEvent e = new PagamentoFallitoEvent
+            {
+                IdOrdine = evento.Ordine.IdOrdine,
+                IdSaga = evento.Ordine.IdSaga.ToString(),
+                Motivo = errore,
+                Prodotti = evento.Ordine.Prodotti
+            };
+            await PubblicazioneEvento(PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO, e);
+
+            _logger.LogInformation("Score non disponibili per Ordine Id {0}: Motivo [{1}]", evento.Ordine.IdOrdine, errore);
+
+        }
+
+    }
+
+
+
+    private async Task PubblicazioneEvento(string routing, Object evento)
+    {
+        string messaggioBody = JsonSerializer.Serialize(evento);
+        var body = Encoding.UTF8.GetBytes(messaggioBody);
+        _channel.BasicPublish(_Queue_Exchange,
+                                routing,
+                                null, body);
+    }
+
 }
