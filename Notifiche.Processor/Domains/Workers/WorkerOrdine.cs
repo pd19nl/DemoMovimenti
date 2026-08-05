@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Ordine;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace Notifiche.Processor.Domains.Workers;
 
@@ -141,8 +143,11 @@ public class WorkerOrdine : BackgroundService
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;
+        //autoack indica la conferma automatica dei messaggi.
+        //Quando è attivo su true, il server rimuove il messaggio dalla coda non appena lo
+        //invia al client, senza attendere che il codice C# confermi l'avvenuta elaborazione
         _channel.BasicConsume(queue: _Queue_Read_Ordine,
-                            autoAck: false,
+                            autoAck: true,
                             consumer: consumer);
 
         //mantenimento del servizio in esecuzione
@@ -162,26 +167,23 @@ public class WorkerOrdine : BackgroundService
     //gestore dei singoli eventi
     private async Task OnEventReceived(object sender, BasicDeliverEventArgs ea)
     {
+
         //indica il tipo di evento
         string routingKey = ea.RoutingKey;
 
         //messaggio serializzato
         string messaggio = Encoding.UTF8.GetString(ea.Body.ToArray());
 
+
         _logger.LogInformation("Evento ricevuto con Routing Key: [{0}]", routingKey);
 
         try
         {
-            //creazione dello scope
-            using var scope = _serviceProvider.CreateScope();
-
-            //istanziare un servizio DI
-            var pagamentoService = scope.ServiceProvider.GetRequiredService<PagamentoService>();
 
             switch (routingKey)
             {
                 case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.PROCESSATO.CREATO:
-                    await Notifica_Ordine_InElaborazione(messaggio, pagamentoService);
+                    await Notifica_Ordine_InElaborazione(messaggio);
                     break;
 
             }
@@ -193,8 +195,41 @@ public class WorkerOrdine : BackgroundService
             //spostamente nella DLE Dead Letter Exchange
             _channel?.BasicNack(ea.DeliveryTag, multiple: false, requeue: false);
         }
+
+
     }
 
 
+
+
+
+    private async Task Notifica_Ordine_InElaborazione(string messaggio)
+    {
+        OrdineCreatoEvent evento = JsonSerializer.Deserialize<OrdineCreatoEvent>(messaggio);
+        if (evento == null)
+        {
+            throw new JsonException("Impossibile deserializzare OrdineCreatoEvent");
+        }
+
+        //se non si è connessi all'hub non si possono inviare notifiche
+        //il messaggio viene scartato per via di autoAck=true
+        //con autoAck a false, gestire eventuale DLE
+        if (_hubConnection.State != HubConnectionState.Connected)
+        {
+            _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
+        }
+
+        string status = "IN ELABORAZIONE";
+        string motivo = "Ordine In elaborazione";
+        string ordineId = evento.IdOrdine;
+
+
+        InviaNotifica(status, motivo, ordineId);
+
+    }
+
+    private void InviaNotifica(string stati, string motivo, string idOrdine)
+    {
+    }
 
 }

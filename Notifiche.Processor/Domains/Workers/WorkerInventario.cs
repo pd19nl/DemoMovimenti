@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Ordini.Contracts;
+using Ordini.Contracts.Events.Inventario;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using System.Text.Json;
 
 namespace Notifiche.Processor.Domains.Workers;
 
@@ -149,8 +151,11 @@ public class WorkerInventario : BackgroundService
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;
+        //autoack indica la conferma automatica dei messaggi.
+        //Quando è attivo su true, il server rimuove il messaggio dalla coda non appena lo
+        //invia al client, senza attendere che il codice C# confermi l'avvenuta elaborazione
         _channel.BasicConsume(queue: _Queue_Read_Inventario,
-                            autoAck: false,
+                            autoAck: true,
                             consumer: consumer);
 
         //mantenimento del servizio in esecuzione
@@ -181,20 +186,14 @@ public class WorkerInventario : BackgroundService
 
         try
         {
-            //creazione dello scope
-            using var scope = _serviceProvider.CreateScope();
-
-            //istanziare un servizio DI
-            var pagamentoService = scope.ServiceProvider.GetRequiredService<PagamentoService>();
-
             switch (routingKey)
             {
                 case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.ALLOCATA:
-                    await Notifica_Inventario_Allocato(messaggio, pagamentoService);
+                    await Notifica_Inventario_Allocato(messaggio);
                     break;
 
                 case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE:
-                    await Notifica_Inventario_NonDisponibile(messaggio, giacenzaRepositoryDB);
+                    await Notifica_Inventario_NonDisponibile(messaggio);
                     break;
             }
         }
@@ -208,4 +207,55 @@ public class WorkerInventario : BackgroundService
     }
 
 
+
+    private async Task Notifica_Inventario_Allocato(string messaggio)
+    {
+        InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
+        if (evento == null)
+        {
+            throw new JsonException("Impossibile deserializzare InventarioNonDisponibileEvent");
+        }
+
+        //se non si è connessi all'hub non si possono inviare notifiche
+        //il messaggio viene scartato per via di autoAck=true
+        //con autoAck a false, gestire eventuale DLE
+        if (_hubConnection.State != HubConnectionState.Connected)
+        {
+            _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
+        }
+
+        string status = "IN ELABORAZIONE";
+        string motivo = $"Merce allocata";
+        string ordineId = evento.IdOrdine;
+
+        InviaNotifica(status, motivo, ordineId);
+
+    }
+    private async Task Notifica_Inventario_NonDisponibile(string messaggio)
+    {
+        InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
+        if (evento == null)
+        {
+            throw new JsonException("Impossibile deserializzare InventarioNonDisponibileEvent");
+        }
+
+        //se non si è connessi all'hub non si possono inviare notifiche
+        //il messaggio viene scartato per via di autoAck=true
+        //con autoAck a false, gestire eventuale DLE
+        if (_hubConnection.State != HubConnectionState.Connected)
+        {
+            _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
+        }
+
+        string status = "FALLITO";
+        string motivo = $"Disponibilità merce non presente: {evento.Motivo}";
+        string ordineId = evento.IdOrdine;
+
+        InviaNotifica(status, motivo, ordineId);
+
+    }
+
+    private void InviaNotifica(string stati, string motivo, string idOrdine)
+    {
+    }
 }
