@@ -1,0 +1,3 @@
+centralizzazione servizi worker
+derivazione worker
+centralizzazione repository

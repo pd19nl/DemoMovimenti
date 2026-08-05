@@ -36,6 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementi di soluzione", "El
 		creazioneProgetto.ps1 = creazioneProgetto.ps1
 		DB_NOTE.txt = DB_NOTE.txt
 		EVENTI_NOTE.txt = EVENTI_NOTE.txt
+		ToDo.txt = ToDo.txt
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordini.ApplicationAPI.Models", "Ordini.ApplicationAPI.Models\Ordini.ApplicationAPI.Models.csproj", "{DA9A9624-2102-4C51-8CB5-22BBCE033FAA}"
