@@ -4,12 +4,6 @@ using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
 
-//serve ad inviare le notifiche al front-end
-
-
-
-
-
 var builder = Host.CreateApplicationBuilder(args);
 
 
@@ -21,12 +15,17 @@ var configuration = builder.Configuration;
 // come servizio singleton
 builder.Services.AddSingleton(r =>
 {
+    var rabbitConfig = configuration.GetSection("RabbitMQ");
+
+    //creazione factory
     var factory = new ConnectionFactory()
     {
-        HostName = configuration["RabbitMQ:HostName"],
-        UserName = configuration["RabbitMQ:UserName"],
-        Password = configuration["RabbitMQ:Password"],
-        DispatchConsumersAsync = true
+        HostName = rabbitConfig["HostName"],
+        UserName = rabbitConfig["UserName"],
+        Password = rabbitConfig["Password"],
+        Port = int.TryParse(rabbitConfig["Port"], out var port) ? port : 5672,
+        VirtualHost = rabbitConfig["VirtualHost"] ?? "/",
+        DispatchConsumersAsync = true //per i cunsumer asincroni
     };
 
     return factory.CreateConnection();
