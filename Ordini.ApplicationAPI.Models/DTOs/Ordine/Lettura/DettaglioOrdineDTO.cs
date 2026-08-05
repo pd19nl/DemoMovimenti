@@ -1,11 +1,10 @@
-﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura
-{
-    public class DettaglioOrdineDTO
-    {
-        public long Id { get; set; }
+﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Lettura;
 
-        public string CodiceArticolo { get; set; } = string.Empty;
-        public int Qta { get; set; }
-        public decimal Prezzo { get; set; }
-    }
+public class DettaglioOrdineDTO
+{
+    public long Id { get; set; }
+
+    public string CodiceArticolo { get; set; } = string.Empty;
+    public int Qta { get; set; }
+    public decimal Prezzo { get; set; }
 }

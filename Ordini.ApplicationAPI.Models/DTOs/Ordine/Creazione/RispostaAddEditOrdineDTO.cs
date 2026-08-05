@@ -1,7 +1,6 @@
-﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Creazione
+﻿namespace Ordini.ApplicationAPI.Models.DTOs.Ordine.Creazione;
+
+public class RispostaAddEditOrdineDTO
 {
-    public class RispostaAddEditOrdineDTO
-    {
-        public string IdSaga { get; set; } = string.Empty;
-    }
+    public string IdSaga { get; set; } = string.Empty;
 }
