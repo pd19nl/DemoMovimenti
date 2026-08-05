@@ -1,0 +1,42 @@
+
+AUTORE					EVENTO							EXCHANGE		QUEUE			ARGOMENTO					EVENTO FINALE SAGA
+======================================================================================================================================
+API						RICHIESTA_ORDINE				ORDINE			ORDINE
+														ORDINE_DLE		ORDINE_DLE		x-dead-letter-exchange
+ORDER.PROCESSOR			ORDINE_CREATO					ORDINE			ORDINE
+														ORDINE_DLE		ORDINE_DLE		x-dead-letter-exchange
+ORDER.PROCESSOR			ORDINE_CANCELLATO				ORDINE			ORDINE										SI
+							#FLUSSO RICHIESTA CANCELLAZIONE
+
+ORDER.PROCESSOR			ORDINE_FINALIZZATO				ORDINE			ORDINE										SI
+							#FLUSSO SUCCESS RICHIESTA ORDINE
+
+ORDER.PROCESSOR			ORDINE_ANNULLATO				ORDINE			ORDINE										SI
+							#FLUSSO ERROR RICHIESTA ORDINE
+
+API						RICHIESTA_CANCELLAZIONE			ORDINE			ORDINE
+														ORDINE_DLE		ORDINE_DLE		x-dead-letter-exchange
+?						ORDINE_MODIFICATO				ORDINE			ORDINE
+
+-----------------------------------------------------------------------------------------------------------------------
+INVENTARIO.PROCESSOR	INVENTARIO_RISERVATO			ORDINE			INVENTARIO
+							#FLUSSO SUCCESS RICHIESTA ORDINE
+														ORDINE_DLE		INVENTARIO_DLE	x-dead-letter-exchange
+
+INVENTARIO.PROCESSOR	INVENTARIO_NON_DISPONIBILE		ORDINE			INVENTARIO
+							#FLUSSO ERROR RICHIESTA ORDINE
+														ORDINE_DLE		INVENTARIO_DLE	x-dead-letter-exchange
+
+INVENTARIO.PROCESSOR	INVENTARIO_RIPRISTINATO			ORDINE			INVENTARIO
+							#FLUSSO ERROR FINALE PER INVENTARIO PER RICHIESTA ORDINE
+
+-----------------------------------------------------------------------------------------------------------------------
+PAGAMENTO.PROCESSOR		PAGAMENTO_FALLITO				ORDINE			PAGAMENTO
+							#FLUSSO ERROR FINALE PER PAGAMENTO E SAGA PER RICHIESTA ORDINE
+														ORDINE_DLE		PAGAMENTO_DLE	x-dead-letter-exchange
+
+PAGAMENTO.PROCESSOR		PAGAMENTO_RIUSCITO				ORDINE			PAGAMENTO
+							#FLUSSO SUCCESS FINALE PER PAGAMENTO PER RICHIESTA ORDINE
+														ORDINE_DLE		PAGAMENTO_DLE	x-dead-letter-exchange
+
+-----------------------------------------------------------------------------------------------------------------------

@@ -39,7 +39,7 @@ public class WorkerOrder : BackgroundService
         //setup che specifica la regola per indicare dove inviare i messaggi rifiutati
         var argumentsToDle = new Dictionary<string, object>
         {
-            {"x-dead-letter-exchange",  PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME_DLQ}
+            {"x-dead-letter-exchange",  PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME_DLQ}
         };
         #endregion
 
@@ -69,8 +69,8 @@ public class WorkerOrder : BackgroundService
         //nb non si associa la dle su questi eventi perchè non serve
 
         //indicazione della coda specifica per il servizio di creazione ordini a partire da richiesta creazione ordini
-        _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME);
-        _channel.QueueDeclare(PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _logger.LogInformation("DEFINIZIONE CODA (QUEUE) {0}", PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME);
+        _channel.QueueDeclare(PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                               durable: PARAMETRI.QUEUE.PROPRIETA.DURABLE,
                               exclusive: PARAMETRI.QUEUE.PROPRIETA.ESCLUSIVE,
                               autoDelete: PARAMETRI.QUEUE.PROPRIETA.AUTODELETE);
@@ -85,44 +85,44 @@ public class WorkerOrder : BackgroundService
         //indicazione degli eventi ai quali si deve ricevere le notifiche
         //  caso richiesta creazione ordine
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                                 PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
+                                PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
 
-        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                            exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
+                           routingKey: PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
 
 
         //  caso fallimento dalla saga da parte dell'inventario
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                                 PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
+                                PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
 
-        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                            exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
+                           routingKey: PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
 
         //  caso fallimento dalla saga da parte del pagamento
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                                 PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
+                                PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
 
-        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                            exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
+                           routingKey: PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
 
         // caso fine saga con successo
         _logger.LogInformation("ASSOCIAZIONE QUEUE {0} A EXCHANGE {1} e Sottoscrizione evento {2}",
-                                PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+                                PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                                 PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                                PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
+                                PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
 
-        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.QueueBind(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                            exchange: PARAMETRI.QUEUE.EXCHANGE.NomeExchangeOrdini,
-                           routingKey: PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
+                           routingKey: PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
 
     }
 
@@ -136,7 +136,7 @@ public class WorkerOrder : BackgroundService
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;
-        _channel.BasicConsume(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI_NAME,
+        _channel.BasicConsume(queue: PARAMETRI.QUEUE.PROPRIETA.ORDINI.NAME,
                             autoAck: false,
                             consumer: consumer);
 
@@ -176,20 +176,20 @@ public class WorkerOrder : BackgroundService
 
             switch (routingKey)
             {
-                case PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CREAZIONE:
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.RICHIESTA.CREAZIONE:
                     await Gestione_Ordine_Richiesta(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO:
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO:
                     // caso fine saga con successo
                     await Gestione_Ordine_Completato(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE:
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE:
                     await Gestione_Ordine_Inventario_NonDisponibile(messaggio, ordineServiceDB);
                     break;
 
-                case PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO:
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO:
                     await Gestione_Ordine_Pagamento_Respinto(messaggio, ordineServiceDB);
                     break;
             }
@@ -206,7 +206,7 @@ public class WorkerOrder : BackgroundService
 
     private async Task Gestione_Ordine_Richiesta(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
-        _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI.QUEUE.KEY_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
+        _logger.LogInformation("Richiesta Creazione Ordine {0}", PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.ORDINE.RICHIESTA.CREAZIONE);
         OrdineRichiestoEvent eventoRichiesta = JsonSerializer.Deserialize<OrdineRichiestoEvent>(messaggio);
 
         var (nuovoId, messaggioOutbox) = await servizioDB.CreazioneOrderOutBoxAsync(eventoRichiesta);
@@ -219,7 +219,7 @@ public class WorkerOrder : BackgroundService
     private async Task Gestione_Ordine_Completato(string messaggio, OrdineRepositoryCRUD servizioDB)
     {
         PagamentoRiuscitoEvent evento = JsonSerializer.Deserialize<PagamentoRiuscitoEvent>(messaggio);
-        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
+        _logger.LogInformation("Fine processo di creazione, validazione ordine, inventario e pagamento ({0})", PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.OK_OrdineConcluso,
                                             "Saga completata con successo");
@@ -232,7 +232,7 @@ public class WorkerOrder : BackgroundService
     {
         InventarioNonDisponibileEvent evento = JsonSerializer.Deserialize<InventarioNonDisponibileEvent>(messaggio);
         //  caso fallimento dalla saga da parte dell'inventario
-        _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI.QUEUE.KEY_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
+        _logger.LogInformation("Ordine annullato per Scorte non presenti ({0})", PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.INVENTARIO.PROCESSATO.NON_DISPONIBILE);
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.KO_ScorteNonPresenti,
                                             evento.Motivo);
@@ -243,7 +243,7 @@ public class WorkerOrder : BackgroundService
     {
         PagamentoFallitoEvent evento = JsonSerializer.Deserialize<PagamentoFallitoEvent>(messaggio);
         //  caso fallimento dalla saga da parte del pagamento
-        _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI.QUEUE.KEY_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
+        _logger.LogInformation("Ordine annullato per Pagamento Rifiutato ({0})", PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO);
 
         await servizioDB.UpdateStatoOrdineAsync(evento.IdOrdine, evento.IdSaga,
                                             eOrdineStato.KO_PagamentoFallito,

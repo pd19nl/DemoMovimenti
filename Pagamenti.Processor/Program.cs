@@ -56,7 +56,7 @@ builder.Services.AddScoped<PagamentoService>();
 
 // =======================================================================================
 //registrazione del processo in background
-builder.Services.AddHostedService<WorkerPagamenti>();
+builder.Services.AddHostedService<WorkerPagamenti_InventarioAllocato>();
 
 
 

@@ -55,8 +55,8 @@ builder.Services.AddScoped<GiacenzaRepositoryCRUD>();
 
 // =======================================================================================
 //registrazione del processo in background
-builder.Services.AddHostedService<WorkerInventario>();
-
+builder.Services.AddHostedService<WorkerInventario_OrdineCreato>();
+builder.Services.AddHostedService<WorkerInventario_PagamentoRespinto>();
 
 
 // =======================================================================================

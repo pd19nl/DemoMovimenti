@@ -106,7 +106,7 @@ public class WorkerOutBox : BackgroundService
             try
             {
                 //instradamento del messaggio
-                string routingkey = PARAMETRI.QUEUE.KEY_EVENTO.GetRoutingKeyForType(m.TipologiaEvento);
+                string routingkey = PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.GetRoutingKeyForType(m.TipologiaEvento);
                 //corpo del messaggio
                 var body = Encoding.UTF8.GetBytes(m.Payload);
                 //pubblicazione messaggio
