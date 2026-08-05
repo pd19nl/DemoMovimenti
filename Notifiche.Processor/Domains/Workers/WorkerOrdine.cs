@@ -245,4 +245,21 @@ public class WorkerOrdine : BackgroundService
         }
     }
 
+
+
+    //chiusura worker: rilascio risorse
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _channel?.Close();
+        _channel?.Dispose();
+
+        if (_hubConnection != null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+
+        base.Dispose();
+    }
+
+
 }

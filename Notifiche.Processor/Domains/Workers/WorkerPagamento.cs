@@ -225,7 +225,7 @@ public class WorkerPagamento : BackgroundService
             _logger.LogError("Ricevuto evento RabbitMQ per ordine {0} tipo Ordine Pagato, ma non connesso all'Hub SignalR. Messaggio scartato", evento.IdOrdine);
         }
 
-        string status = "COMPLETATO";
+        eOrdineStatus status = eOrdineStatus.Success;
         string motivo = "Ordine Elaborato con successo";
         string ordineId = evento.IdOrdine;
 
@@ -274,6 +274,21 @@ public class WorkerPagamento : BackgroundService
         {
             _logger.LogError(ex, "Errore durante l'invio della notifica all'Hub SignalR");
         }
+    }
+
+
+    //chiusura worker: rilascio risorse
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _channel?.Close();
+        _channel?.Dispose();
+
+        if (_hubConnection != null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+
+        base.Dispose();
     }
 
 

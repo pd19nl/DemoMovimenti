@@ -271,4 +271,21 @@ public class WorkerInventario : BackgroundService
             _logger.LogError(ex, "Errore durante l'invio della notifica all'Hub SignalR");
         }
     }
+
+
+
+    //chiusura worker: rilascio risorse
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        _channel?.Close();
+        _channel?.Dispose();
+
+        if (_hubConnection != null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+
+        base.Dispose();
+    }
+
 }

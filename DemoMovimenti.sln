@@ -12,6 +12,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifiche.Processor", "Notifiche.Processor\Notifiche.Processor.csproj", "{F72C1843-F630-4E87-BD7E-DF6B0C2E3CD9}"
 	ProjectSection(ProjectDependencies) = postProject
 		{A7DD151F-2087-4B76-B9E6-D96B8030E8D4} = {A7DD151F-2087-4B76-B9E6-D96B8030E8D4}
+		{DA9A9624-2102-4C51-8CB5-22BBCE033FAA} = {DA9A9624-2102-4C51-8CB5-22BBCE033FAA}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ordini.Processor", "Ordini.Processor\Ordini.Processor.csproj", "{A7C26707-8A3D-4E45-AA4F-8B780E54BFED}"
