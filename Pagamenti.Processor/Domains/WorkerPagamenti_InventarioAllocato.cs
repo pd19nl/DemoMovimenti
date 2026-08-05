@@ -277,7 +277,7 @@ public class WorkerPagamenti_InventarioAllocato : BackgroundService
             };
             PubblicazioneEvento(PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO, e);
 
-            _logger.LogInformation("Score riservato con successo per Ordine Id {0}", evento.Ordine.IdOrdine);
+            _logger.LogInformation("Pagamento riuscito per Ordine Id {0}", evento.Ordine.IdOrdine);
 
         }
         else
@@ -291,7 +291,7 @@ public class WorkerPagamenti_InventarioAllocato : BackgroundService
             };
             await PubblicazioneEvento(PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO, e);
 
-            _logger.LogInformation("Score non disponibili per Ordine Id {0}: Motivo [{1}]", evento.Ordine.IdOrdine, errore);
+            _logger.LogInformation("Pagamento fallito per Ordine Id {0}: Motivo [{1}]", evento.Ordine.IdOrdine, errore);
 
         }
 
