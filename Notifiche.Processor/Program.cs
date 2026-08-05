@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.SignalR.Client;
-using Notifiche.Processor;
+using Notifiche.Processor.Domains.Workers;
 using RabbitMQ.Client;
 using Serilog;
 using System.Reflection;
 
 
-//serve ad inviare le notifiche al front-end
+//serve ad inviare le notifiche all'Hub SignalR. mentre Ordini.API le inoltra al front-end
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -80,8 +80,8 @@ builder.Services.AddSingleton<HubConnection>(sp =>
 // =======================================================================================
 //registrazione del processo in background
 builder.Services.AddHostedService<WorkerOrdine>();
-//builder.Services.AddHostedService<WorkerPagamento>();
-//builder.Services.AddHostedService<WorkerInventario>();
+builder.Services.AddHostedService<WorkerPagamento>();
+builder.Services.AddHostedService<WorkerInventario>();
 
 
 // =======================================================================================

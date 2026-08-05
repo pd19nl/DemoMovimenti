@@ -181,9 +181,6 @@ public class WorkerPagamenti_InventarioAllocato : BackgroundService
             routingKey: ""
             );
 
-
-
-
     }
 
 
