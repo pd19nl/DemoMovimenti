@@ -1,11 +1,10 @@
-﻿namespace Ordini.Contracts.Models.Ordini
+﻿namespace Ordini.Contracts.Models.Ordini;
+
+public class OrdineWorkFlow
 {
-    public class OrdineWorkFlow
-    {
-        public string Id { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
 
-        public DateTime Data { get; set; }
+    public DateTime Data { get; set; }
 
-        public eOrdineStato CodiceStato { get; set; } = eOrdineStato.OK_InElaborazione;
-    }
+    public eOrdineStato CodiceStato { get; set; } = eOrdineStato.OK_InElaborazione;
 }

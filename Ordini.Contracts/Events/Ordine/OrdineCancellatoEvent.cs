@@ -1,9 +1,8 @@
-﻿namespace Ordini.Contracts.Events.Ordine
-{
-    public class OrdineCancellatoEvent
-    {
-        public Guid IdSaga { get; set; } = Guid.NewGuid();
+﻿namespace Ordini.Contracts.Events.Ordine;
 
-        public string IdOrdine { get; set; } = string.Empty;
-    }
+public class OrdineCancellatoEvent
+{
+    public Guid IdSaga { get; set; } = Guid.NewGuid();
+
+    public string IdOrdine { get; set; } = string.Empty;
 }
