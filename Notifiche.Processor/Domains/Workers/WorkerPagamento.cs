@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.SignalR.Client;
 using Ordini.Contracts;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
+using System.Text;
 
 namespace Notifiche.Processor.Domains.Workers;
 
@@ -44,7 +46,7 @@ public class WorkerPagamento : BackgroundService
 
 
     //avvio worker - procedura di associazione alla coda RabbitMQ per i messaggi di interesse
-    public override Task StartAsync(CancellationToken stoppingToken)
+    public override async Task StartAsync(CancellationToken stoppingToken)
     {
         _channel = _rabbitConnection.CreateModel();
 
@@ -54,10 +56,25 @@ public class WorkerPagamento : BackgroundService
 
         AssociazioneQueueESottoscrizioneExchange();
 
-        return base.StartAsync(stoppingToken);
+        await ConnessioneAdHubSignalR();
+
+        await base.StartAsync(stoppingToken);
     }
 
+    private async Task ConnessioneAdHubSignalR()
+    {
+        //l'hub è ospitato su Ordini.Api
+        try
+        {
+            _logger.LogInformation("Tentativo di connessione  all'Hub SignalR ");
+            await _hubConnection.StartAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Impossibile connettersi all'Hub SignalR aLL'avvio");
+        }
 
+    }
 
     private void DichiarazioneExchange()
     {
@@ -115,15 +132,80 @@ public class WorkerPagamento : BackgroundService
     }
 
 
+
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
+        //ci si assicura che il canale sia pronto
+        if (_channel == null)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            _logger.LogError("Canale RabbitMQ non inizializzato. il Worker Pagamento (Notifiche) non può avviarsi.");
+            return;
+        }
+
+        //configurazione consumer asincrono
+        var consumer = new AsyncEventingBasicConsumer(_channel);
+        //imposta il gestore dei messaggi ricevuti
+        consumer.Received += OnEventReceived;
+
+        //Avvio consumo dei messaggi in coda;
+        _channel.BasicConsume(queue: _Queue_Read_Pagamento,
+                            autoAck: false,
+                            consumer: consumer);
+
+        //mantenimento del servizio in esecuzione
+        await Task.Delay(Timeout.Infinite, stoppingToken);
+
+        //while (!stoppingToken.IsCancellationRequested)
+        //{
+        //    if (_logger.IsEnabled(LogLevel.Information))
+        //    {
+        //        _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+        //    }
+        //    await Task.Delay(1000, stoppingToken);
+        //}
+    }
+
+
+
+    //gestore dei singoli eventi
+    private async Task OnEventReceived(object sender, BasicDeliverEventArgs ea)
+    {
+        //indica il tipo di evento
+        string routingKey = ea.RoutingKey;
+
+        //messaggio serializzato
+        string messaggio = Encoding.UTF8.GetString(ea.Body.ToArray());
+
+        _logger.LogInformation("Evento ricevuto con Routing Key: [{0}]", routingKey);
+
+        try
+        {
+            //creazione dello scope
+            using var scope = _serviceProvider.CreateScope();
+
+            //istanziare un servizio DI
+            var pagamentoService = scope.ServiceProvider.GetRequiredService<PagamentoService>();
+
+            switch (routingKey)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.EFFETTUATO:
+                    await Notifica_Pagamento_Effettua(messaggio, pagamentoService);
+                    break;
+
+                case PARAMETRI.QUEUE.KEY_ROUTING_EVENTO.PAGAMENTO.PROCESSATO.RESPINTO:
+                    await Notifica_Giacenza_Ripristina(messaggio, giacenzaRepositoryDB);
+                    break;
             }
-            await Task.Delay(1000, stoppingToken);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Evento nella gestione evento con Routing Key: [{0}]", routingKey);
+
+            //spostamente nella DLE Dead Letter Exchange
+            _channel?.BasicNack(ea.DeliveryTag, multiple: false, requeue: false);
         }
     }
+
+
 }
