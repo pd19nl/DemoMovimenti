@@ -45,7 +45,7 @@ builder.Services.AddScoped(r =>
 
 // =======================================================================================
 // configurazione Serilog
-var appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "Inventario.Worker";
+var appName = Assembly.GetEntryAssembly()?.GetName().Name ?? "Notifiche.Worker";
 builder.Logging.ClearProviders();
 
 //lettura appsettings
@@ -65,17 +65,47 @@ builder.Logging.AddSerilog();
 builder.Services.AddSingleton<HubConnection>(sp =>
 {
     //lettura urk
-    var hubUrl = configuration["SignalR.HubUrl"] ?? throw new InvalidOperationException("Url Hub di SignalR non configurato");
+    var hubUrl = configuration["SignalR.HubUrl"]
+                ?? throw new InvalidOperationException("Url Hub di SignalR non configurato");
 
     var connessione = new HubConnectionBuilder()
     .WithUrl(hubUrl)
     .WithAutomaticReconnect() // tenta di riconnettersi 
+    .Build();
+
+    return connessione;
 });
 
 
 // =======================================================================================
 //registrazione del processo in background
 builder.Services.AddHostedService<WorkerOrdine>();
+//builder.Services.AddHostedService<WorkerPagamento>();
+//builder.Services.AddHostedService<WorkerInventario>();
 
+
+// =======================================================================================
+//
 var host = builder.Build();
-host.Run();
+
+
+//AVVIO CON GESTIONE DELLE ECCEZIONI
+//host.Run();
+try
+{
+    Log.Information("Worker [{application}] avviato con successo",
+        Assembly.GetEntryAssembly()?.GetName().Name);
+    host.Run();
+
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex,
+              "Worker [{application}] terminato in modo anomalo",
+                Assembly.GetEntryAssembly()?.GetName().Name);
+}
+finally
+{
+    Log.CloseAndFlush();
+}
+
