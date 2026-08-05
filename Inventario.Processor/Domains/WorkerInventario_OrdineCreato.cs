@@ -222,6 +222,9 @@ public class WorkerInventario_OrdineCreato : BackgroundService
         consumer.Received += OnEventReceived;
 
         //Avvio consumo dei messaggi in coda;
+        //autoack indica la conferma automatica dei messaggi.
+        //Quando è attivo su true, il server rimuove il messaggio dalla coda non appena lo
+        //invia al client, senza attendere che il codice C# confermi l'avvenuta elaborazione
         _channel.BasicConsume(queue: _Queue_Read_Ordine,
                             autoAck: false,
                             consumer: consumer);
